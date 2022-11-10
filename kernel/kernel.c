@@ -1,7 +1,6 @@
 #include "drivers/vga.h"
-#include "drivers/keyboard.h"
 
 void main() {
     clear_screen();
-    print_string("Installing interrupt service routines (ISRs).\n");
+    print_string("Booted into the kernel!\n");
 }
