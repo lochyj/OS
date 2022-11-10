@@ -1,0 +1,8 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled", // This is annoying and yet helpful at the same time : disable or enable it as you like
+    "prettier.endOfLine": "lf",
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c"
+    }
+}

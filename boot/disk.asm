@@ -1,0 +1,47 @@
+; ----------------------------------------------------------------------
+; Reading from the disk. The table below explains the asm instructions!|
+; ----------------------------------------------------------------------
+; ---------------------------------------
+; REGISTER  Paramater                   |
+; AH        Mode (0x02 = read from disk)|
+; AL        Number of sectors to read   |
+; CH        Cylinder number             |
+; CL        Sector number               |
+; DH        Head number                 |
+; DL        Drive number                |
+; ES:BX     Buffer address              |
+; ---------------------------------------
+
+disk_load:
+    pusha
+    push dx
+
+    mov ah, 0x02        ; Read mode
+    mov al, dh          ; Number of sectors to read
+    mov cl, 0x02        ; Start read at sector 2
+                        ; This is due to the fact that the first sector is our boot loader!
+
+    mov ch, 0x00         ; Start read at cylinder 0
+    mov dh, 0x00         ; Start read at head 0
+
+    int 0x13            ; Call the BIOS interrupt
+    jc disk_error       ; If the carry flag is set, then there was an error!
+
+    pop dx              ; Get the original number of sectors to read
+    cmp al, dh          ; Compare the number of sectors read with the number of sectors to read
+                        ; If the number of sectors read is less than the number of sectors to read then there was an error!
+
+    jne sectors_error   ; Jump to the sectors_error label if the number of sectors read is less than the number of sectors to read
+
+    popa
+    ret
+
+sectors_error:
+    jmp disk_loop       ; If there was an error, then jump back to the disk_loop label
+
+disk_error:
+    jmp disk_loop       ; If there was an error, then jump back to the disk_loop label
+
+disk_loop:
+    jmp $               ; If there was an error, then jump back to the beginning of the code
+                        ; TODO: Add some debug code here so that we can see what the error was and so that im not confused when there is a constant booting loop :( *Gets flashbacks
