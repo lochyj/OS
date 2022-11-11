@@ -86,11 +86,23 @@ void print_string(char *string) {
     set_cursor(offset);
 }
 
+void print_nl() {
+    int offset = get_cursor();
+    offset = move_offset_to_new_line(offset);
+    set_cursor(offset);
+}
+
 void clear_screen() {
     for (int i = 0; i < MAX_COLS * MAX_ROWS; ++i) {
         set_char_at_video_memory(' ', i * 2);
     }
     set_cursor(get_offset(0, 0));
+}
+
+void print_backspace() {
+    int newCursor = get_cursor() - 2;
+    set_char_at_video_memory(' ', newCursor);
+    set_cursor(newCursor);
 }
 
 #endif
