@@ -8,7 +8,7 @@ void main() {
 
     print_string("Enabling external interrupts.\n");
     asm volatile("sti");
-
+    
     print_string("Initializing keyboard (IRQ 1).\n");
     init_keyboard();
 }
