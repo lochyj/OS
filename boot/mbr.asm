@@ -1,13 +1,13 @@
 [bits 16]
 [org 0x7c00]
 
-KERNEL_OFFSET equ 0x9000    ; Load the kernel into memory with an offset of 0x9000 to allow for the boot loader
+KERNEL_OFFSET equ 0x9000    ; Load the kernel into memory with an offset of 0x1000 to allow for the boot loader
 
 
 mov [BOOT_DRIVE], dl        ; Get the boot drive from the bios stored at dl
 
 
-mov bp, 0x9000              ; Setting up the stack
+mov bp, 0xF000              ; Setting up the stack
 mov sp, bp                  ; "
 
 
