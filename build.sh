@@ -38,4 +38,4 @@ echo "---- Running in QEMU ----"
 
 #qemu-system-i386 -d int -no-reboot -fda ./out/image/image.img <-- debug
 
-qemu-system-i386 -fda ./out/image/image.img
+qemu-system-i386 -d int -no-reboot -fda ./out/image/image.img

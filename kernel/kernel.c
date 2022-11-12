@@ -4,6 +4,7 @@
 void main() {
     clear_screen();
     print_string("Installing interrupt service routines (ISRs).\n");
+    load_idt();
     isr_install();
 
     print_string("Enabling external interrupts.\n");
