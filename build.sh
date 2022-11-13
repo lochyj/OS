@@ -5,6 +5,8 @@ echo "---- Removing old files ----"
 rm -rf ./out/*
 rm -rf ./out/image/*
 
+rm -rf kernel.elf
+
 mkdir ./out/image
 
 echo "---- Building ASM ----"
@@ -21,7 +23,7 @@ echo "---- Compiling C ----"
 
 # Compiling the C code
 
-gcc -m32 -fno-pie -ffreestanding -fno-stack-protector -c ./kernel/kernel.c -o ./out/kernel.out
+gcc -m32 -g -fno-pie -ffreestanding -fno-stack-protector -c ./kernel/kernel.c -o ./out/kernel.out
 #-g 
 
 echo "---- Linking output files ----"
@@ -36,6 +38,8 @@ cat ./out/mbr.bin ./out/kernel.bin > ./out/image/image.img
 
 echo "---- Running in QEMU ----"
 
-#qemu-system-i386 -d int -no-reboot -fda ./out/image/image.img <-- debug
+ld -m elf_i386 -o kernel.elf -Ttext 0x1000 ./out/kernel-entry.out ./out/asm.out ./out/kernel.out
 
-qemu-system-i386 -d int -no-reboot -fda ./out/image/image.img
+#qemu-system-i386 -d int -no-reboot -fda ./out/image/image.img <-- debug
+qemu-system-i386 -no-reboot -fda ./out/image/image.img -d trace, int & gdb -ex "target remote localhost:5900" -ex "symbol-file kernel.elf"
+
