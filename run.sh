@@ -1,2 +1,2 @@
 clear
-qemu-system-i386 -fda ./out/image.bin
+qemu-system-i386 -fda ./out/image/image.img
