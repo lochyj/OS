@@ -29,7 +29,7 @@ gcc -m32 -g -fno-pie -ffreestanding -fno-stack-protector -c ./kernel/kernel.c -o
 echo "---- Linking output files ----"
 # Linking the files
 # TODO: Fix linking issue where it won't link the out files properly and creates a file that is smaller than it should be
-ld -m elf_i386 -shared -fstack-protector -o ./out/kernel.bin -Ttext 0x1000 ./out/kernel-entry.out ./out/asm.out ./out/kernel.out --oformat binary 
+ld -m elf_i386 -shared -fstack-protector -o ./out/kernel.bin -Ttext 0x9000 ./out/kernel-entry.out ./out/asm.out ./out/kernel.out --oformat binary 
 # -e main -nostdlib
 
 echo "---- Adding MBR bin to kernel bin ----"
@@ -38,8 +38,6 @@ cat ./out/mbr.bin ./out/kernel.bin > ./out/image/image.img
 
 echo "---- Running in QEMU ----"
 
-ld -m elf_i386 -o kernel.elf -Ttext 0x1000 ./out/kernel-entry.out ./out/asm.out ./out/kernel.out
-
-#qemu-system-i386 -d int -no-reboot -fda ./out/image/image.img <-- debug
-qemu-system-i386 -no-reboot -fda ./out/image/image.img -d trace, int & gdb -ex "target remote localhost:5900" -ex "symbol-file kernel.elf"
+qemu-system-i386 -fda ./out/image/image.img
+#qemu-system-i386 -no-reboot -fda ./out/image/image.img -d trace, int & gdb -ex "target remote localhost:5900" -ex "symbol-file kernel.elf"
 

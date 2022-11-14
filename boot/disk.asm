@@ -18,7 +18,7 @@ disk_load:
 
     mov ah, 0x02        ; Read mode
     mov al, dh          ; Number of sectors to read
-    mov cl, 0x02        ; Start read at sector 2
+    mov cl, 0x02        ; Start read at sector 2 <- currently this will go to sector 17
                         ; This is due to the fact that the first sector is our boot loader!
 
     mov ch, 0x00         ; Start read at cylinder 0

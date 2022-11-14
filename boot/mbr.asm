@@ -1,7 +1,7 @@
 [bits 16]
 [org 0x7c00]
 
-KERNEL_OFFSET equ 0x9000    ; Load the kernel into memory with an offset of 0x1000 to allow for the boot loader
+KERNEL_OFFSET equ 0x9000    ; Load the kernel into memory with an offset of 0x9000 to allow for the boot loader
 
 
 mov [BOOT_DRIVE], dl        ; Get the boot drive from the bios stored at dl
@@ -29,7 +29,7 @@ jmp $
 ; Loading the kernel
 load_kernel:
     mov bx, KERNEL_OFFSET   ; bx --> offset of the kernel
-    mov dh, 2               ; dh --> number of sectors to read
+    mov dh, 31              ; dh --> number of sectors to read ; This was the source of many many hours of suffering ; TODO: Make this dynamic
     mov dl, [BOOT_DRIVE]    ; dl --> boot drive
     call disk_load          ; call disk_load to load the kernel
     ret

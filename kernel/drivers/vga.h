@@ -1,12 +1,14 @@
 #include "ports.h"
 
+#include "../inc/types.h"
+
 #ifndef VGA_H
 #define VGA_H
 
 #define VGA_CTRL_REGISTER 0x3d4
 #define VGA_DATA_REGISTER 0x3d5
-#define VGA_OFFSET_LOW 0x0f
-#define VGA_OFFSET_HIGH 0x0e
+#define VGA_OFFSET_LOW 15
+#define VGA_OFFSET_HIGH 14
 
 void set_cursor(int offset) {
     offset /= 2;
@@ -56,8 +58,8 @@ void memory_copy(char *source, char *dest, int nbytes) {
 
 int scroll_ln(int offset) {
     memory_copy(
-            (char *) (get_offset(0, 1) + VIDEO_ADDRESS),
-            (char *) (get_offset(0, 0) + VIDEO_ADDRESS),
+            (u8 *) (get_offset(0, 1) + VIDEO_ADDRESS),
+            (u8 *) (get_offset(0, 0) + VIDEO_ADDRESS),
             MAX_COLS * (MAX_ROWS - 1) * 2
     );
 
@@ -81,19 +83,22 @@ void print_string(char *string) {
             set_char_at_video_memory(string[i], offset);
             offset += 2;
         }
-        i++;
+        i++;                                            
     }
     set_cursor(offset);
 }
 
 void print_nl() {
-    int offset = get_cursor();
-    offset = move_offset_to_new_line(offset);
-    set_cursor(offset);
+    int newOffset = move_offset_to_new_line(get_cursor());
+    if (newOffset >= MAX_ROWS * MAX_COLS * 2) {
+        newOffset = scroll_ln(newOffset);
+    }
+    set_cursor(newOffset);
 }
 
 void clear_screen() {
-    for (int i = 0; i < MAX_COLS * MAX_ROWS; ++i) {
+    int screen_size = MAX_COLS * MAX_ROWS;
+    for (int i = 0; i < screen_size; ++i) {
         set_char_at_video_memory(' ', i * 2);
     }
     set_cursor(get_offset(0, 0));
