@@ -1,6 +1,6 @@
 #include "inc/types.h"
 #include "inc/util.h"
-#include "libs/registry/registry.h"
+#include "libs/registry/shell_registry.h"
 
 #ifndef SHELL_H
 #define SHELL_H
@@ -27,15 +27,10 @@ void execute_command(char* input) {
     int hit = false;
 
 
-    for (int i = 0; i < registry_entry_count; i++) {
-        if (get_registry_entry(i).type == 0) {
-            if (compare_string(get_registry_entry(i).value, input) == false) {
-                print_string("Command fount at registry entry ");
-                char* loc; int_to_string(i, loc);
-                print_string(loc);
-                print_nl();
-                hit = true;
-            }
+    for (int i = 0; i < shell_registry_entry_count; i++) {
+        if (compare_string(get_shell_registry_entry(i).value, input) == false) {
+            get_shell_registry_entry(i).funCall(0);
+            hit = true;
         }
     }
 
@@ -52,11 +47,9 @@ void execute_command(char* input) {
     else if (compare_string(input, "HELP") == false) {
 
         print_string("Available commands:\n");
-        for (int i = 0; i < registry_entry_count; i++) {
-            if (get_registry_entry(i).type == 0) {
-                print_string(get_registry_entry(i).value);
-                print_nl();
-            }
+        for (int i = 0; i < shell_registry_entry_count; i++) {
+            print_string(get_shell_registry_entry(i).value);
+            print_nl();
         }
         print_string("EXIT\nCLS\nHELP\n");
         hit = true;
