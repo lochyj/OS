@@ -7,11 +7,13 @@
 * This is a basic registry system for the kernel. It is used to store and retrieve data commonly used by the kernel, such as shell commands and other important information.
 */
 
+typedef void (*FunctionCallback)(int);
 
 struct registry_entry {
     char* name;
     char* value;
     int type;
+    FunctionCallback passThrough;
 };
 
 struct registry_entry registry[100];
@@ -19,10 +21,11 @@ struct registry_entry registry[100];
 int registry_entry_count = 0;
 
 // TODO: implement a proper way of adding keys to registry entries
-void add_registry_entry(char* name, char* value, int type) {
+void add_registry_entry(char* name, char* value, int type, FunctionCallback passThrough) {
     registry[registry_entry_count].name = name;
     registry[registry_entry_count].value = value;
     registry[registry_entry_count].type = type;
+    registry[registry_entry_count].passThrough = passThrough;
     registry_entry_count++;
 }
 

@@ -28,7 +28,7 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
 
 // Make this a registry entry
-#define SHELL_COMMAND_BOOL = false;
+#define SHELL_COMMAND_BOOL false
 
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
@@ -43,8 +43,8 @@ static void keyboard_callback(registers_t *regs) {
         key_buffer[0] = '\0';
     } else if(SHELL_COMMAND_BOOL == true) {
         for (int i = 0; i < registry_entry_count; i++) {
-            if (compare_string(get_registry_entry(i).name, "keyboard_out") == false) {
-                
+            if (compare_string(get_registry_entry(i).name, "keyboard_pass") == 0 && compare_string(get_registry_entry(i).value, "false") == 0) {
+                get_registry_entry(i).passThrough(0);
             }
         }
     } else {
