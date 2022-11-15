@@ -1,6 +1,4 @@
-#include "inc/types.h"
-#include "inc/util.h"
-#include "libs/registry/shell_registry.h"
+#include "include.h"
 
 #ifndef SHELL_H
 #define SHELL_H
@@ -11,18 +9,7 @@
 */
 void execute_command(char* input) {
 
-    // TODO: seperate the input into command and arguments
-    // int i = 0;
-    // while (input[i] != ' ' && input[i] != '\0') {
-    //     i++;
-    // }
-
-    // char* command = '\0';
-
-    // for (int j = 0; j < i; j++) {
-    //     command[j] = input[j];
-    // }
-    // ----
+    // TODO: separate the input into command and arguments
 
     int hit = false;
 

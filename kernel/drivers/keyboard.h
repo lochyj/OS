@@ -1,9 +1,6 @@
-#include "../libs/registry/registry.h"
-#include "../inc/types.h"
-#include "../inc/util.h"
 #include "../cpu/cpu.h"
 #include "../shell.h"
-#include "vga.h"
+#include "../include.h"
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
@@ -30,6 +27,9 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
 // Make this a registry entry
 #define SHELL_COMMAND_BOOL false
 
+subscription_bus keyboard_bus[1001];
+
+// TODO: Make this use the subscription bus when it is done
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
     if (scancode > SC_MAX) return;
@@ -41,12 +41,6 @@ static void keyboard_callback(registers_t *regs) {
         print_nl();
         execute_command(key_buffer);
         key_buffer[0] = '\0';
-    } else if(SHELL_COMMAND_BOOL == true) {
-        for (int i = 0; i < registry_entry_count; i++) {
-            if (compare_string(get_registry_entry(i).name, "keyboard_pass") == 0 && compare_string(get_registry_entry(i).value, "false") == 0) {
-                get_registry_entry(i).passThrough(0);
-            }
-        }
     } else {
         char letter = sc_ascii[(int) scancode];
         append(key_buffer, letter);

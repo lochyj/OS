@@ -1,15 +1,8 @@
+#include "../../include.h"
 
 #ifndef S_REGISTRY_H
 
 #define S_REGISTRY_H
-
-typedef void (*FunctionCallback)(int);
-
-struct shell_registry_entry {
-    char* name;
-    char* value;
-    FunctionCallback funCall;
-};
 
 struct shell_registry_entry shell_registry[100];
 

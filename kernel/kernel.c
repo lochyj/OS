@@ -1,9 +1,9 @@
-#include "drivers/vga.h"
-#include "drivers/keyboard.h"
-#include "libs/shell/init_shell.h"
+#include "include.h"
 
-void main() {
+#define kernel_version "0.1.0"
+#define boot_loader_version "0.2"
 
+void init() {
     clear_screen();
     print_string("Installing interrupt service routines (ISRs).\n");
     load_idt();
@@ -12,9 +12,14 @@ void main() {
     print_string("Enabling external interrupts.\n");
     asm volatile("sti");
 
-    print_string("Initialising the shell registry.\n");
-    init_shell_commands();
-
     print_string("Initializing keyboard (IRQ 1).\n> ");
     init_keyboard();
+}
+
+void main() {
+
+    init();
+
+    
+    
 }
