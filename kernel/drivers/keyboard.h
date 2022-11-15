@@ -1,4 +1,6 @@
+#include "../libs/registry/registry.h"
 #include "../inc/types.h"
+#include "../inc/util.h"
 #include "../cpu/cpu.h"
 #include "../shell.h"
 #include "vga.h"
@@ -25,6 +27,9 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V',
                          'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
 
+// Make this a registry entry
+#define SHELL_COMMAND_BOOL = false;
+
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
     if (scancode > SC_MAX) return;
@@ -32,10 +37,16 @@ static void keyboard_callback(registers_t *regs) {
         if (backspace(key_buffer)) {
             print_backspace();
         }
-    } else if (scancode == ENTER) {
+    } else if (scancode == ENTER && SHELL_COMMAND_BOOL == false) {
         print_nl();
         execute_command(key_buffer);
         key_buffer[0] = '\0';
+    } else if(SHELL_COMMAND_BOOL == true) {
+        for (int i = 0; i < registry_entry_count; i++) {
+            if (compare_string(get_registry_entry(i).name, "keyboard_out") == false) {
+                
+            }
+        }
     } else {
         char letter = sc_ascii[(int) scancode];
         append(key_buffer, letter);
