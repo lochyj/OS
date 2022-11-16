@@ -19,4 +19,5 @@ void add_shell_registry_entry(char* name, char* value, FunctionCallback funCall)
 struct shell_registry_entry get_shell_registry_entry(int index) {
     return shell_registry[index];
 }
+
 #endif

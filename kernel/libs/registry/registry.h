@@ -16,7 +16,7 @@
  */
 
 // TODO: make this dynamic in the future
-struct registry_entry registry[1001];
+struct registry_entry registry[100];
 
 int registry_entry_count = 0;
 
@@ -28,23 +28,23 @@ void add_registry_entry(char* name, char* value, int type) {
     registry_entry_count++;
 }
 
-struct registry_entry[] get_registry_entry_by_name(char* name) {
-    struct registry_entry out[1001];
+struct registry_entry* get_registry_entry_by_name(char* name) {
+    struct registry_entry out[100];
     int count = 0;
     for (int i = 0; i < registry_entry_count; i++) {
         if (compare_string(registry[i].name, name) == 0) {
-            out[count] = &registry_entry[i]
+            out[count] = &registry_entry[i];
         }
     }
     count ? return out : return 0;
 }
 
-struct registry_entry[] get_registry_entry_by_type(int type) {
-    struct registry_entry out[1001];
+struct registry_entry* get_registry_entry_by_type(int type) {
+    struct registry_entry out[100];
     int count = 0;
     for (int i = 0; i < registry_entry_count; i++) {
         if (registry[i].type == type) {
-            out[count] = &registry_entry[i]
+            out[count] = &registry_entry[i];
         }
     }
     count ? return out : return 0;

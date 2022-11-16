@@ -5,21 +5,25 @@
 
 void init() {
     clear_screen();
-    print_string("Installing interrupt service routines (ISRs).\n");
     load_idt();
     isr_install();
-
-    print_string("Enabling external interrupts.\n");
     asm volatile("sti");
 
-    print_string("Initializing keyboard (IRQ 1).\n> ");
+    add_registry_entry("KEYBOARD_PASSTHROUGH", "true", 0);
+
     init_keyboard();
+}
+
+void printer(char str) {
+    print_char(str);
 }
 
 void main() {
 
     init();
 
-    
+    FunctionCallback callback = &printer;
+
+    add_keyboard_sub("printer", callback);
     
 }
