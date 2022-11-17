@@ -1,29 +1,44 @@
-#include "include.h"
-
-#define kernel_version "0.1.0"
-#define boot_loader_version "0.2"
-
-void init() {
-    clear_screen();
-    load_idt();
-    isr_install();
-    asm volatile("sti");
-
-    add_registry_entry("KEYBOARD_PASSTHROUGH", "true", 0);
-
-    init_keyboard();
-}
-
-void printer(char str) {
-    print_char(str);
-}
+#include "drivers/vga.h"
+#include "drivers/keyboard.h"
+#include "registry/registry.h"
 
 void main() {
 
-    init();
+    clear_screen();
+    print_string("Installing interrupt service routines (ISRs).\n");
+    load_idt();
+    isr_install();
 
-    FunctionCallback callback = &printer;
-
-    add_keyboard_sub("printer", callback);
+    print_string("Enabling external interrupts.\n");
+    asm volatile("sti");
     
+    print_string("Initializing keyboard (IRQ 1).\n> ");
+    init_keyboard();
+
+    subscribe_to_bus(keyboard_bus, (SubscribeBus) {"keyboard", keyboard_callback});
+
+    // TODO: make this work
+
+    // RegistryEntry entry;
+
+    // RegistryKey key;
+
+    // entry.name = "keyboard";
+    // entry.type = 1;
+    // key.name = "KEYBOARD";
+    // key.key = "Lol F";
+    // entry.keys[10] = key;
+
+    // registry_add_entry(entry);
+
+    // for (int i = 0; i < registry_count; i++) {
+    //     print_nl();
+    //     print_string(registry[i].name);
+    //     print_nl();
+    //     print_string(registry[i].keys[0].name);
+    //     print_nl();
+    //     print_string(registry[i].keys[0].key);
+    //     print_nl();
+    // }
+
 }

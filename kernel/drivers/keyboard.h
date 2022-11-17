@@ -1,6 +1,8 @@
+#include "../inc/types.h"
+#include "../registry/registry.h"
 #include "../cpu/cpu.h"
 #include "../shell.h"
-#include "../include.h"
+#include "vga.h"
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
@@ -24,23 +26,8 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V',
                          'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
 
-subscription_bus keyboard_bus[1001];
-int keyboard_bus_index = 0;
-
-void add_keyboard_sub(char* name, FunctionCallback callback) {
-    keyboard_bus[keyboard_bus_index].name = name;
-    keyboard_bus[keyboard_bus_index].callback = callback;
-    keyboard_bus_index++;
-}
-
-void remove_keyboard_sub(char* name) {
-    for (int i = 0; i < keyboard_bus_index; i++) {
-        if (compare_string(keyboard_bus[i].name, name) == 0) {
-            keyboard_bus[i].name = "";
-            keyboard_bus[i].callback = 0;
-        }
-    }
-}
+// TODO: make this work idk lol
+SubscribeBus keyboard_bus[1001];
 
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
@@ -49,7 +36,7 @@ static void keyboard_callback(registers_t *regs) {
         if (backspace(key_buffer)) {
             print_backspace();
         }
-    } else if (scancode == ENTER && get_registry_entry_by_type(0)[0].value == "true") {
+    } else if (scancode == ENTER) {
         print_nl();
         execute_command(key_buffer);
         key_buffer[0] = '\0';
@@ -60,10 +47,8 @@ static void keyboard_callback(registers_t *regs) {
         print_string(str);
     }
 
-    for (int i = 0; i < keyboard_bus_index; i++) {
-        if (keyboard_bus[i].callback != 0) {
-            keyboard_bus[i].callback(scancode);
-        }
+    for (int i = 0; compare_string(keyboard_bus[i].name, NULL) != 0; i++) {
+        keyboard_bus[i].callback(scancode);
     }
 }
 
