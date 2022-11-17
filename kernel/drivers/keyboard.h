@@ -26,8 +26,10 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V',
                          'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
 
-// TODO: make this work idk lol
+// TODO: make this work idk
 SubscribeBus keyboard_bus[1001];
+
+u32 keyboard_bus_count = 0;
 
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
@@ -47,8 +49,10 @@ static void keyboard_callback(registers_t *regs) {
         print_string(str);
     }
 
-    for (int i = 0; compare_string(keyboard_bus[i].name, NULL) != 0; i++) {
-        keyboard_bus[i].callback(scancode);
+    for (u32 i = 0; i <= keyboard_bus_count; i++) {
+        // NOTE: remember to use [0] for calling callback.
+        // TODO: make this not return opcode 6
+        //keyboard_bus[i].callback[0]();
     }
 }
 

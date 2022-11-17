@@ -112,8 +112,6 @@ typedef struct {
     u32 eip, cs, eflags, useresp, ss;               // Pushed by the processor automatically
 } registers_t;
 
-// IDFK what this does 
-// TODO: Research it
 typedef void (*isr_t)(registers_t*);
 
 // ---------------------------------------------------------
@@ -147,7 +145,7 @@ void set_idt_gate(int n, u32 handler) {
 // ISR          <- Interrupt Service Routines
 // ------------------------------------------
 
-// NOTE: Copilot just made this and it came directly from https://github.com/FRosner/FrOS/ stfu copilot.
+// NOTE: Copilot just made this and it came directly from https://github.com/FRosner/FrOS/ stuff you copilot.
 char* exception_messages[] = {
     "Division by zero",
     "Debug",
@@ -206,9 +204,6 @@ void load_idt() {
 void register_interrupt_handler(u8 n, isr_t handler) {
     interrupt_handlers[n] = handler;
 }
-
-
-// TODO: Possibly move this to its own file to remove some bloat from CPU_H
 
 void isr_install() {
     set_idt_gate(0, (u32)isr0); // Division by zero

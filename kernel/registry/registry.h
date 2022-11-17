@@ -5,7 +5,8 @@
 
 #define REGISTRY_H
 
-typedef void (*FunctionCallback) (int);
+// TODO: make this a dynamic passthrough, such as "..." or something idk
+typedef void (*FunctionCallback) ();
 
 typedef struct {
 
@@ -30,7 +31,7 @@ typedef struct {
     int type;
 
     // NOTE: This will be a problem in the future. I need to make this static in the future.
-    RegistryKey keys[10];
+    RegistryKey keys;
 
 } RegistryEntry;
 
@@ -47,12 +48,10 @@ bool registry_add_entry(RegistryEntry entry) {
     return true;
 }
 
-bool subscribe_to_bus(SubscribeBus bus[], SubscribeBus entry) {
-    for (int i = 0; compare_string(bus[i].name, NULL) != 0; i++) {
-        bus[i] = entry;
-        return true;
-    }
-    return false;
+void subscribe_to_bus(SubscribeBus *bus[], SubscribeBus entry, u32 *loc) {
+    u32 b = *loc;
+    *bus[b] = entry;
+    *loc++;
 }
 
 #endif

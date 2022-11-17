@@ -50,7 +50,6 @@ disk_error:
 
 disk_loop:
     jmp $               ; If there was an error, then jump back to the beginning of the code
-                        ; TODO: Add some debug code here so that we can see what the error was and so that im not confused when there is a constant booting loop :( *Gets flashbacks
 
 DISK_ERROR: db "Disk read error: ", 0
 SECTOR_ERROR: db "Sector read error: ", 0

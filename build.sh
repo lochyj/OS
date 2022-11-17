@@ -28,7 +28,6 @@ gcc -m32 -g -fno-pie -ffreestanding -fno-stack-protector -c ./kernel/kernel.c -o
 
 echo "---- Linking output files ----"
 # Linking the files
-# TODO: Fix linking issue where it won't link the out files properly and creates a file that is smaller than it should be
 ld -m elf_i386 -shared -fstack-protector -o ./out/kernel.bin -Ttext 0x9000 ./out/kernel-entry.out ./out/asm.out ./out/kernel.out --oformat binary 
 # -e main -nostdlib
 
