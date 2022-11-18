@@ -8,7 +8,7 @@
 // TODO: make this a dynamic passthrough, such as "..." or something idk
 typedef void (*FunctionCallback) ();
 
-typedef struct {
+typedef struct SubscribeBus {
 
     char* name;
 
@@ -16,7 +16,7 @@ typedef struct {
 
 } SubscribeBus;
 
-typedef struct {
+typedef struct RegistryKey {
 
     char* name;
 
@@ -24,13 +24,13 @@ typedef struct {
 
 } RegistryKey;
 
-typedef struct {
+typedef struct RegistryEntry {
 
     char* name;
 
     int type;
 
-    // NOTE: This will be a problem in the future. I need to make this static in the future.
+    // TODO: Make this recursive or something
     RegistryKey keys;
 
 } RegistryEntry;

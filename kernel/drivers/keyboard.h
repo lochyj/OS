@@ -52,7 +52,7 @@ static void keyboard_callback(registers_t *regs) {
     for (u32 i = 0; i <= keyboard_bus_count; i++) {
         // NOTE: remember to use [0] for calling callback.
         // TODO: make this not return opcode 6
-        keyboard_bus[i].callback[0](scancode);
+        // keyboard_bus[i].callback[0](scancode);
     }
 }
 
