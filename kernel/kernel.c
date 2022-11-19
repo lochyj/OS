@@ -2,8 +2,6 @@
 #include "drivers/keyboard.h"
 #include "registry/registry.h"
 
-void nothing(char a) {};
-
 void main() {
 
     clear_screen();
@@ -22,5 +20,10 @@ void main() {
     SubscribeBus bus = {"keyboard", callback};
 
     subscribe_to_bus(&keyboard_bus, bus, &keyboard_bus_count);
+
+    for (int i = 0; i < keyboard_bus_count; i++) {
+        print_string(keyboard_bus[i].name);
+        print_nl();
+    }
 
 }
