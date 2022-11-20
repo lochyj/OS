@@ -6,13 +6,13 @@
 #define REGISTRY_H
 
 // TODO: make this a dynamic passthrough, such as "..." or something idk
-typedef void (*FunctionCallback) ();
+typedef void (*FunctionCallback) (u8);
 
 typedef struct SubscribeBus {
 
     char* name;
 
-    FunctionCallback* callback;
+    FunctionCallback callback[1];
 
 } SubscribeBus;
 
@@ -35,7 +35,7 @@ typedef struct RegistryEntry {
 
 } RegistryEntry;
 
-u32 registry_count = 0;
+int registry_count = 0;
 
 RegistryEntry registry[1001];
 
@@ -48,10 +48,9 @@ bool registry_add_entry(RegistryEntry entry) {
     return true;
 }
 
-void subscribe_to_bus(SubscribeBus *bus[], SubscribeBus entry, u32 *loc) {
-    u32 b = *loc;
-    *bus[b] = entry;
-    *loc++;
+void subscribe_to_bus(SubscribeBus bus[], SubscribeBus entry, int loc) {
+    bus[loc] = entry;
+    loc++;
 }
 
 #endif

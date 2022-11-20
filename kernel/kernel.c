@@ -2,6 +2,9 @@
 #include "drivers/keyboard.h"
 #include "registry/registry.h"
 
+void nothing(u8 scancode) {print_string("\nNothing");}
+
+
 void main() {
 
     clear_screen();
@@ -19,11 +22,6 @@ void main() {
 
     SubscribeBus bus = {"keyboard", callback};
 
-    subscribe_to_bus(&keyboard_bus, bus, &keyboard_bus_count);
-
-    for (int i = 0; i < keyboard_bus_count; i++) {
-        print_string(keyboard_bus[i].name);
-        print_nl();
-    }
+    subscribe_to_bus(keyboard_bus, bus, keyboard_bus_count);
 
 }
