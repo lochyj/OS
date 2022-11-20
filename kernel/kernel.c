@@ -2,7 +2,9 @@
 #include "drivers/keyboard.h"
 #include "registry/registry.h"
 
-void nothing(u8 scancode) {print_string("\nNothing");}
+void nothing(u8 scancode) {
+    print_string(" ");
+}
 
 
 void main() {
