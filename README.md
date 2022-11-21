@@ -24,7 +24,8 @@ We currently dont support running or building on windows or mac. If you want to 
 - [Pritam Zope](https://www.codeproject.com/Articles/1225196/Create-Your-Own-Kernel-In-C-2)
 - [Carlos Fenollosa](https://github.com/cfenollosa/os-tutorial)
 - [OS Dev Wiki](https://wiki.osdev.org/Main_Page)
+- [Frank Rosner](https://dev.to/frosnerd)
 
 ## Legal
 
-Some parts of this project were not created by me (Lachlan Jowett) and I do not claim ownership of them. Alongside this, the individual files have their own licenses, which can be found in the `LICENSE` file in their respective repos.
+Some parts of this project were not created by me (Lachlan Jowett) and I do not claim ownership of them. Alongside this, the individual files have their own licenses, which can be found in the `LICENSE` file in their respective repos or on the public domain The individual parts that were created by me are licensed under the MIT license. More details on licensing can be found in the `LICENSE` file in the root directory of the project.

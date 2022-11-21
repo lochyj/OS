@@ -16,13 +16,21 @@ typedef struct SubscribeBus {
 
 } SubscribeBus;
 
-typedef struct RegistryKey {
+typedef struct CharRegistryKey {
 
     char* name;
 
     char* key;
 
-} RegistryKey;
+} CharRegistryKey;
+
+typedef struct BinRegistryKey {
+
+    char* name;
+
+    u32 key;
+
+} BinRegistryKey;
 
 typedef struct RegistryEntry {
 
@@ -31,7 +39,9 @@ typedef struct RegistryEntry {
     int type;
 
     // TODO: Make this recursive or something
-    RegistryKey keys;
+    CharRegistryKey char_keys;
+
+    BinRegistryKey bin_keys;
 
 } RegistryEntry;
 
