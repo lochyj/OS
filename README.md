@@ -4,9 +4,6 @@
 - nasm
 - qemu
 - gcc
-- grub
-- mtools
-- xorriso
 
 ## Running
 
