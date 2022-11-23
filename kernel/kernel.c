@@ -1,6 +1,7 @@
 #include "drivers/vga.h"
 #include "drivers/keyboard.h"
 #include "registry/registry.h"
+#include "init.c"
 
 void nothing(u8 scancode) {
     print_string(" ");
@@ -8,6 +9,7 @@ void nothing(u8 scancode) {
 
 
 void main() {
+    init();
 
     clear_screen();
     print_string("Installing interrupt service routines (ISRs).\n");

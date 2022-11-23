@@ -31,6 +31,12 @@ SubscribeBus keyboard_bus[1001];
 
 u32 keyboard_bus_count = 0;
 
+void scancode_to_ascii(u8 scancode) {
+    char letter = sc_ascii[(int) scancode];
+    append(key_buffer, letter);
+    char str[2] = {letter, '\0'};
+} 
+
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
     if (scancode > SC_MAX) return;

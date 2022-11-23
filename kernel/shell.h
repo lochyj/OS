@@ -4,6 +4,19 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+// TODO: these functions
+void enable_shell() {
+
+}
+
+void stop_shell() {
+
+}
+
+void shell_input_wrapper() {
+
+}
+
 void execute_command(char *input) {
     int hit = false;
     if (compare_string(input, "EXIT") == false) {

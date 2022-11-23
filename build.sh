@@ -37,6 +37,5 @@ cat ./out/mbr.bin ./out/kernel.bin > ./out/image/image.img
 
 echo "---- Running in QEMU ----"
 
-qemu-system-i386 -fda ./out/image/image.img
-#qemu-system-i386 -no-reboot -fda ./out/image/image.img -d trace, int & gdb -ex "target remote localhost:5900" -ex "symbol-file kernel.elf"
+qemu-system-i386 -fda ./out/image/image.img -drive file=./env/disk.drv,format=raw,media=disk
 
