@@ -16,21 +16,13 @@ typedef struct SubscribeBus {
 
 } SubscribeBus;
 
-typedef struct CharRegistryKey {
+typedef struct RegistryKey {
 
     char* name;
 
     char* key;
 
-} CharRegistryKey;
-
-typedef struct BinRegistryKey {
-
-    char* name;
-
-    u32 key;
-
-} BinRegistryKey;
+} RegistryKey;
 
 typedef struct RegistryEntry {
 
@@ -38,10 +30,8 @@ typedef struct RegistryEntry {
 
     int type;
 
-    // TODO: Make this recursive or something
-    CharRegistryKey char_keys;
-
-    BinRegistryKey bin_keys;
+    // INFO: there is a max of 10 keys per entry for size reasons -> 1001 * 10 = 10,010 keys so yeah
+    RegistryKey char_keys[10];
 
 } RegistryEntry;
 

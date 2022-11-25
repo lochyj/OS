@@ -9,5 +9,6 @@
         "IDFK",
         "Lctrl",
         "Spacebar"
-    ]
+    ],
+    "discord.enabled": true
 }
