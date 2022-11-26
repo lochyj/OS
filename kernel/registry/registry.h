@@ -1,3 +1,5 @@
+//TODO: move this to the utilities folder for a more general use.
+
 #include "../inc/types.h"
 #include "../inc/util.h"
 
@@ -48,9 +50,9 @@ bool registry_add_entry(RegistryEntry entry) {
     return true;
 }
 
-void subscribe_to_bus(SubscribeBus bus[], SubscribeBus entry, int loc) {
-    bus[loc] = entry;
-    loc++;
+void subscribe_to_bus(SubscribeBus bus[], SubscribeBus entry, int *loc) {
+    bus[*loc] = entry;
+    *loc++;
 }
 
 #endif

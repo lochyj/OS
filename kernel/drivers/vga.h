@@ -1,6 +1,7 @@
 #include "ports.h"
 
 #include "../inc/types.h"
+#include "../inc/util.h"
 
 #ifndef VGA_H
 #define VGA_H
@@ -32,9 +33,9 @@ int get_cursor() {
 #define WHITE_ON_BLACK 0x0f
 
 void set_char_at_video_memory(char character, int offset) {
-    unsigned char *vidmem = (unsigned char *) VIDEO_ADDRESS;
-    vidmem[offset] = character;
-    vidmem[offset + 1] = WHITE_ON_BLACK;
+    unsigned char *videoMemory = (unsigned char *) VIDEO_ADDRESS;
+    videoMemory[offset] = character;
+    videoMemory[offset + 1] = WHITE_ON_BLACK;
 }
 
 int get_row_from_offset(int offset) {
@@ -86,6 +87,12 @@ void print_string(char *string) {
         i++;                                            
     }
     set_cursor(offset);
+}
+
+void print_int(int num) {
+    char* buffer;
+    int_to_string(num, buffer);
+    print_string(buffer);
 }
 
 void print_nl() {

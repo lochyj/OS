@@ -13,12 +13,21 @@ int string_length(char s[]) {
     return i;
 }
 
-void reverse(char s[]) {
+int int_length(int n) {
+    int i = 0;
+    while (n != 0) {
+        n /= 10;
+        ++i;
+    }
+    return i;
+}
+
+void reverse(char string[]) {
     int c, i, j;
-    for (i = 0, j = string_length(s)-1; i < j; i++, j--) {
-        c = s[i];
-        s[i] = s[j];
-        s[j] = c;
+    for (i = 0, j = string_length(string)-1; i < j; i++, j--) {
+        c = string[i];
+        string[i] = string[j];
+        string[j] = c;
     }
 }
 
