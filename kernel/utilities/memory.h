@@ -58,7 +58,7 @@ void print_dynamic_mem() {
 
 void *find_best_mem_block(dynamic_mem_node *dynamic_mem, size_t size) {
     dynamic_mem_node *best_mem_block = (dynamic_mem_node *) NULL_POINTER;    // Initialize the result pointer with NULL and an invalid block size
-    u32 best_mem_block_size = DYNAMIC_MEM_TOTAL_SIZE + 1;              // This is larger than the maximum possible size of the dynamic memory area and will be overwritten by the first valid block
+    u32 best_mem_block_size = DYNAMIC_MEM_TOTAL_SIZE + 1;                   // This is larger than the maximum possible size of the dynamic memory area and will be overwritten by the first valid block
 
     dynamic_mem_node *current_mem_block = dynamic_mem;
     while (current_mem_block) {
@@ -74,21 +74,21 @@ void *find_best_mem_block(dynamic_mem_node *dynamic_mem, size_t size) {
 void *malloc(size_t size) {
     dynamic_mem_node *best_mem_block = (dynamic_mem_node *) find_best_mem_block(dynamic_mem_start, size);
 
-    if (best_mem_block != NULL_POINTER) { // Check if we found matching 
+    if (best_mem_block != NULL_POINTER) {                                           // Check if we found matching 
         best_mem_block->size = best_mem_block->size - size - DYNAMIC_MEM_NODE_SIZE; // Subtract the newly allocated memory including the size of the memory node from the selected block
 
         dynamic_mem_node *mem_node_allocate = (dynamic_mem_node *) ((u8 *) best_mem_block + DYNAMIC_MEM_NODE_SIZE + best_mem_block->size); // Create the new mem node after the selected node, this effectively splits the region into two.
 
-        mem_node_allocate->size = size; // Set the size of the new mem node
-        mem_node_allocate->used = true; // Set the used flag of the new mem node
+        mem_node_allocate->size = size;                 // Set the size of the new mem node
+        mem_node_allocate->used = true;                 // Set the used flag of the new mem node
         mem_node_allocate->next = best_mem_block->next; // Set the next pointer of the new mem node
-        mem_node_allocate->prev = best_mem_block; // Set the prev pointer of the new mem node
+        mem_node_allocate->prev = best_mem_block;       // Set the prev pointer of the new mem node
 
-        if (best_mem_block->next != NULL_POINTER) { // Check if the selected block has a next block
+        if (best_mem_block->next != NULL_POINTER) {     // Check if the selected block has a next block
             best_mem_block->next->prev = mem_node_allocate; // Set the prev pointer of the next block to the new mem node
         }
 
-        best_mem_block->next = mem_node_allocate; // Set the next pointer of the selected block to the new mem node
+        best_mem_block->next = mem_node_allocate;       // Set the next pointer of the selected block to the new mem node
 
         return (void *) ((u8 *) mem_node_allocate + DYNAMIC_MEM_NODE_SIZE); // Return the pointer to the newly allocated memory
     }
@@ -98,12 +98,10 @@ void *malloc(size_t size) {
 void *merge_next_node_into_current(dynamic_mem_node *current_mem_node) {
     dynamic_mem_node *next_mem_node = current_mem_node->next;
     if (next_mem_node != NULL_POINTER && !next_mem_node->used) {
-        // add size of next block to current block
-        current_mem_node->size += current_mem_node->next->size;
+        current_mem_node->size += current_mem_node->next->size; // Add the size of the next block to the current block
         current_mem_node->size += DYNAMIC_MEM_NODE_SIZE;
 
-        // remove next block from list
-        current_mem_node->next = current_mem_node->next->next;
+        current_mem_node->next = current_mem_node->next->next;  // Remove the next block from the list
         if (current_mem_node->next != NULL_POINTER) {
             current_mem_node->next->prev = current_mem_node;
         }
@@ -144,5 +142,12 @@ void mem_free(void *ptr) {
     merge_current_node_into_prev(mem_node_free); // Merge the current node into the previous node if possible
 }
 
+void* alloc(int n) {
+    int *ptr = (int *) malloc(n * sizeof(int));
+    if (ptr == NULL_POINTER) {
+        print_string("Memory not allocated.\n");
+    }
+    return ptr;
+}
 
 #endif

@@ -33,7 +33,7 @@ typedef struct RegistryEntry {
     int type;
 
     // INFO: there is a max of 10 keys per entry for size reasons -> 1001 * 10 = 10,010 keys so yeah
-    RegistryKey char_keys[10];
+    RegistryKey keys[1];
 
 } RegistryEntry;
 
@@ -41,13 +41,9 @@ int registry_count = 0;
 
 RegistryEntry registry[1001];
 
-bool registry_add_entry(RegistryEntry entry) {
-    if (registry_count >= 1000) {
-        return false;
-    }
+void registry_add_entry(RegistryEntry entry) {
     registry[registry_count] = entry;
     registry_count++;
-    return true;
 }
 
 void subscribe_to_bus(SubscribeBus bus[], SubscribeBus entry, int *loc) {

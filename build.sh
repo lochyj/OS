@@ -37,5 +37,5 @@ cat ./out/mbr.bin ./out/kernel.bin > ./out/image/image.img
 
 echo "---- Running in QEMU ----"
 
-qemu-system-i386 -fda ./out/image/image.img -drive file=./env/disk.drv,format=raw,media=disk
+qemu-system-i386 -fda ./out/image/image.img
 
