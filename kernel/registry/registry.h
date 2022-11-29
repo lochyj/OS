@@ -18,6 +18,8 @@ typedef struct SubscribeBus {
 
 } SubscribeBus;
 
+// Start depreciated
+
 typedef struct RegistryKey {
 
     char* name;
@@ -45,6 +47,8 @@ void registry_add_entry(RegistryEntry entry) {
     registry[registry_count] = entry;
     registry_count++;
 }
+
+// End
 
 void subscribe_to_bus(SubscribeBus bus[], SubscribeBus entry, int *loc) {
     bus[*loc] = entry;
