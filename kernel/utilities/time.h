@@ -34,6 +34,9 @@ void init_time() {
     char prev = port_byte_in(0x71);	    // Read the current value of register B
     port_byte_out(0x70, 0x8B);		    // Set the index again (a read will reset the index to register D)
     port_byte_out(0x71, prev | 0x40);	// write the previous value ORed with 0x40. This turns on bit 6 of register B
+
+    port_byte_out(0x70, 0x0C);	// select register C
+    port_byte_in(0x71);		// just throw away contents
 }
 
 Time get_kernel_time() {

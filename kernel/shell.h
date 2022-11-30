@@ -4,21 +4,41 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-// struct shell_command {
-//     char* name;         // Name of the command
-//     int type;           // 0 = internal, 1 = external;
-//     char* value;
-//     void (*function)(char* input); // function pointer
+typedef struct shell_command {
+    char* name;         // Name of the command
+    int type;           // 0 = internal, 1 = external;
+    char* value;
+    void (*function)(int argc, char* argv[]);   // Function pointer
     
-// };
+} shell_command;
 
-// void exit(char* input) {
-//     print_string("Stopping the CPU. Bye!\n");
-//     asm volatile("hlt");
-// }
+void exit(char* input) {
+    print_string("Stopping the CPU. Bye!\n");
+    asm volatile("hlt");
+}
+
+shell_command commands = shell_command[1001];
+
+int shell_commands_length = 0;
 
 void execute_shell_input(char* input) {
     int hit = false;
+
+    [aaa, aaa, aaaa]
+
+    int argc = 0;
+    char* argv[];
+
+    for (int i = 0; i < string_length(input); i++) {
+        if (input[i] == ' ') {
+            argc++;
+            i++;
+        }
+        argv[argc] = input[i];
+    }
+
+    for (int i = 0; )
+
     if (compare_string(input, "EXIT") == 0) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");

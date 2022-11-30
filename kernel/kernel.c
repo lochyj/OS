@@ -21,9 +21,6 @@ void init() {
     
     print_string("Initializing keyboard (IRQ 1).\n> ");
     init_keyboard();
-
-    port_byte_out(0x70, 0x0C);	// select register C
-    port_byte_in(0x71);		// just throw away contents
     
 }
 
