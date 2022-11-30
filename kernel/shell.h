@@ -4,15 +4,28 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-void execute_command(char *input) {
+// struct shell_command {
+//     char* name;         // Name of the command
+//     int type;           // 0 = internal, 1 = external;
+//     char* value;
+//     void (*function)(char* input); // function pointer
+    
+// };
+
+// void exit(char* input) {
+//     print_string("Stopping the CPU. Bye!\n");
+//     asm volatile("hlt");
+// }
+
+void execute_shell_input(char* input) {
     int hit = false;
-    if (compare_string(input, "EXIT") == false) {
+    if (compare_string(input, "EXIT") == 0) {
         print_string("Stopping the CPU. Bye!\n");
         asm volatile("hlt");
-    } else if (compare_string(input, "CLS") == false) {
+    } else if (compare_string(input, "CLS") == 0) {
         clear_screen();
         hit = true;
-    } else if (compare_string(input, "HELP") == false) {
+    } else if (compare_string(input, "HELP") == 0) {
         print_string("Available commands: EXIT, CLS, HELP\n");
         hit = true;
     }

@@ -24,7 +24,10 @@ We currently don't have instruction for running or building on windows or mac. I
 - [Carlos Fenollosa - Repo](https://github.com/cfenollosa/os-tutorial)
 - [OS Dev - Wiki](https://wiki.osdev.org/Main_Page)
 - [Frank Rosner - Tutorial that I used](https://dev.to/frosnerd)
+- [Max Schlüssel - Ghost - repo](https://github.com/maxdev1/ghost)
 - [The linux contributers - Repo](https://github.com/torvalds/linux)
+
+// TODO: Add licenses to each file from their respective owners
 
 ## Legal
 

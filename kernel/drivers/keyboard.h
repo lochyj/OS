@@ -46,7 +46,7 @@ static void keyboard_callback(registers_t *regs) {
         }
     } else if (scancode == ENTER) {
         print_nl();
-        execute_command(key_buffer);
+        execute_shell_input(key_buffer);
         key_buffer[0] = '\0';
     } else {
         char letter = sc_ascii[(int) scancode];
@@ -55,9 +55,10 @@ static void keyboard_callback(registers_t *regs) {
         print_string(str);
     }
 
-    for (int i = 0; i <= keyboard_bus_count; i++) {
-        keyboard_bus[i].callback[0]('a');
-    }
+    // TODO: Fix...
+    // for (int i = 0; i <= keyboard_bus_count; i++) {
+    //     keyboard_bus[i].callback[0]('a');
+    // }
 }
 
 void init_keyboard() {
