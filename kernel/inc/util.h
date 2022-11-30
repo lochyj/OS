@@ -51,6 +51,16 @@ void append(char s[], char n) {
     s[len+1] = '\0';
 }
 
+int append_int_to_int(int n, int m) {
+    int length = int_length(m);
+    for (int i = 0; i < length; i++) {
+        int digit = m % 10;
+        n = n * 10 + digit;
+        m /= 10;
+    }
+    return n;
+}
+
 bool backspace(char s[]) {
     int len = string_length(s);
     if (len > 0) {
