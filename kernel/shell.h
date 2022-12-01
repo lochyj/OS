@@ -75,7 +75,6 @@ void init_kshell() {
     ShellFunction help_function = &help;
     shell_command help_command = {"Help", 0, "help", "Displays this help menu", &help};
     add_kshell_command(help_command);
-
 }
 
 void add_shell_command(shell_command command) {

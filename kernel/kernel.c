@@ -20,8 +20,8 @@ void kinit() {
     print_string("Initializing dynamic memory.\n");
     init_dynamic_mem();
 
-    print_string("Initializing kernel shell commands.\n");
-    init_kshell();
+    //// print_string("Initializing kernel shell commands.\n");
+    //// init_kshell();
 
     print_string("Initializing keyboard (IRQ 1).\n> ");
     init_keyboard();

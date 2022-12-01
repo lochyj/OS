@@ -24,14 +24,13 @@ echo "---- Compiling C ----"
 # Compiling the C code
 
 gcc -m32 -g -fno-pie -ffreestanding -fno-stack-protector -I . -c ./kernel/kernel.c -o ./out/kernel.out
-#-g 
 
 echo "---- Linking output files ----"
-# Linking the files
+
 ld -m elf_i386 -shared -fstack-protector -o ./out/kernel.bin -Ttext 0x9000 ./out/kernel-entry.out ./out/asm.out ./out/kernel.out --oformat binary 
 # -e main -nostdlib
 
-echo "---- Adding MBR bin to kernel bin ----"
+echo "---- Adding MBR bin to kernel bin ----" 
 
 cat ./out/mbr.bin ./out/kernel.bin > ./out/image/image.img
 

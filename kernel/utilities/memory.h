@@ -122,6 +122,7 @@ void *merge_current_node_into_prev(dynamic_mem_node *current_mem_node) {
             current_mem_node->next->prev = prev_mem_node;
         }
     }
+    return prev_mem_node;
 }
 
 
