@@ -4,7 +4,8 @@
 #include "utilities/memory.h"
 #include "utilities/time.h"
 
-void init() {
+void kinit() {
+
     clear_screen();
     print_string("Installing interrupt service routines (ISRs).\n");
     load_idt();
@@ -24,8 +25,8 @@ void init() {
     
 }
 
-void main() {
+void kmain() {
 
-    init();
+    kinit();
 
 }

@@ -1,43 +1,84 @@
 #include "inc/types.h"
 #include "inc/util.h"
+#include "utilities/time.h"
 
 #ifndef SHELL_H
 #define SHELL_H
 
+typedef void (*ShellFunction) (int argc, char* argv[]);
+
 typedef struct shell_command {
     char* name;         // Name of the command
     int type;           // 0 = internal, 1 = external;
-    char* value;
-    void (*function)(int argc, char* argv[]);   // Function pointer
+    char* value;        // The value used for matching and calling the function in the command line / shell
+    ShellFunction callback; // Function pointer
     
 } shell_command;
 
-void exit(char* input) {
+// --- Init shell commands registry ---
+shell_command commands[1001];
+
+int shell_commands_length = 0;
+
+// --- end ---
+
+// --- commands ---
+
+void exit(int argc, char* argv[]) {
     print_string("Stopping the CPU. Bye!\n");
     asm volatile("hlt");
 }
 
-shell_command commands = shell_command[1001];
+void cls(int argc, char* argv[]) {
+    clear_screen();
+}
 
-int shell_commands_length = 0;
+void help(int argc, char* argv[]) {
+    // Nothing yet!
+}
 
+// --- end ---
+
+// --- admin and init_kshell ---
+void init_kshell() {
+    ShellFunction exit_function = &exit;
+    shell_command exit_command = {"exit", 0, "exit", &exit};
+
+}
+
+void add_shell_command(shell_command command) {
+    command.type = 1;
+
+    for (int i = 0; i < shell_commands_length; i++) {
+        if (i == (shell_commands_length - 1) ) {
+            commands[i] = command;
+        }
+    }
+
+}
+
+
+// --- This is called by the keyboard driver ---
+// TODO: add a check for the keyboard driver that checks if the kernel wants to call shell commands
 void execute_shell_input(char* input) {
-    int hit = false;
-
-    [aaa, aaa, aaaa]
+    bool hit = false;
 
     int argc = 0;
-    char* argv[];
+    // NOTE: possible sources of errors
+    char argv[100][1001];
 
+    int j = 0;
     for (int i = 0; i < string_length(input); i++) {
         if (input[i] == ' ') {
             argc++;
             i++;
+            j = 0;
+            print_string("Hit!");
+            print_nl();
         }
-        argv[argc] = input[i];
+        argv[argc][j] = input[i];
+        j++;
     }
-
-    for (int i = 0; )
 
     if (compare_string(input, "EXIT") == 0) {
         print_string("Stopping the CPU. Bye!\n");
@@ -48,7 +89,10 @@ void execute_shell_input(char* input) {
     } else if (compare_string(input, "HELP") == 0) {
         print_string("Available commands: EXIT, CLS, HELP\n");
         hit = true;
-    }
+    } /* else if (compare_string(input, "TIME") == 0) {
+        print_time(get_kernel_time());
+        hit = true;
+    } */
 
     // If the command was not recognized, print an error message.
     if (hit == false) {
