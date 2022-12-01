@@ -1,12 +1,12 @@
-#include "inc/types.h"
-#include "inc/util.h"
-#include "utilities/time.h"
+#include "kernel/inc/types.h"
+#include "kernel/inc/util.h"
+#include "kernel/utilities/time.h"
 #include "kernel/utilities/memory.h"
 
 #ifndef SHELL_H
 #define SHELL_H
 
-typedef void (*ShellFunction) (int argc, char** argv);
+typedef void (*ShellFunction) (int argc, char* argv[]);
 
 typedef struct shell_command {
     char* name;         // Name of the command
@@ -54,13 +54,14 @@ void help(int argc, char* argv[]) {
 
 // --- Admin and init_kshell ---
 void add_kshell_command(shell_command command) {
-    command.type = 0;
+    //! command.type = 0; // This causes a bug, so I'm not using it.
 
     for (int i = 0; i < shell_commands_length; i++) {
         if (i == (shell_commands_length - 1) ) {
             commands[i] = command;
         }
     }
+    shell_commands_length++;
 }
 
 void init_kshell() {
@@ -78,13 +79,14 @@ void init_kshell() {
 }
 
 void add_shell_command(shell_command command) {
-    command.type = 1;
+    //! command.type = 1; // This causes a bug, so I'm not using it.
 
     for (int i = 0; i < shell_commands_length; i++) {
         if (i == (shell_commands_length - 1) ) {
             commands[i] = command;
         }
     }
+    shell_commands_length++;
 }
 
 // --- This is called by the keyboard driver ---
@@ -94,7 +96,7 @@ void execute_shell_input(char* input) {
 
     int argc = 0;
     // NOTE: -possible sources of errors- * Is a source of errors // TODO: fix the errors lol
-    char** argv = (char **) malloc(1001 * sizeof(char*));
+    char** argv = (char **) alloc(100 * sizeof(char*));
 
     int j = 0;
     for (int i = 0; i < string_length(input); i++) {
@@ -117,8 +119,15 @@ void execute_shell_input(char* input) {
     }
 
     // Checks if there was a command hit and if not, prints an error message.
-    if (hit == false) {
-        print_string("Unknown command '"); print_string(argv[0]); print_string("' Type HELP for a list of available commands.\n");
+    if(argv[0] != NULL_POINTER) {
+        if (hit == false) {
+            print_string("Unknown command '"); print_string(argv[0]); print_string("' Type HELP for a list of available commands.\n");
+        }
+    }
+    else {
+        if (hit == false) {
+            print_string("Command wasn't found; Type HELP for a list of available commands.\n");
+        }
     }
 
     hit = false;

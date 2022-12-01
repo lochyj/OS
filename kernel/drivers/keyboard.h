@@ -1,3 +1,5 @@
+// TODO: make not dependant on ../
+
 #include "../inc/types.h"
 #include "../registry/registry.h"
 #include "../cpu/cpu.h"

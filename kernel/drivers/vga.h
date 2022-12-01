@@ -28,8 +28,8 @@ int get_cursor() {
 }
 
 #define VIDEO_ADDRESS 0xb8000
-#define MAX_ROWS 25
-#define MAX_COLS 80
+#define MAX_ROWS 25             // *Characters
+#define MAX_COLS 80             // *Characters
 #define WHITE_ON_BLACK 0x0f
 
 void set_char_at_video_memory(char character, int offset) {
