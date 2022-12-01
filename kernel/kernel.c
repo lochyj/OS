@@ -1,8 +1,8 @@
-#include "drivers/vga.h"
-#include "drivers/keyboard.h"
-#include "registry/registry.h"
-#include "utilities/memory.h"
-#include "utilities/time.h"
+#include "kernel/drivers/vga.h"
+#include "kernel/drivers/keyboard.h"
+#include "kernel/registry/registry.h"
+#include "kernel/utilities/memory.h"
+#include "kernel/utilities/time.h"
 
 void kinit() {
 
@@ -19,10 +19,13 @@ void kinit() {
 
     print_string("Initializing dynamic memory.\n");
     init_dynamic_mem();
-    
+
+    print_string("Initializing kernel shell commands.\n");
+    init_kshell();
+
     print_string("Initializing keyboard (IRQ 1).\n> ");
     init_keyboard();
-    
+
 }
 
 void kmain() {
