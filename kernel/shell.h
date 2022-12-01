@@ -65,7 +65,7 @@ void execute_shell_input(char* input) {
 
     int argc = 0;
     // NOTE: possible sources of errors
-    char argv[100][1001];
+    char argv[100][100];
 
     int j = 0;
     for (int i = 0; i < string_length(input); i++) {
@@ -73,7 +73,6 @@ void execute_shell_input(char* input) {
             argc++;
             i++;
             j = 0;
-            print_string("Hit!");
             print_nl();
         }
         argv[argc][j] = input[i];
@@ -104,4 +103,3 @@ void execute_shell_input(char* input) {
 }
 
 #endif
-
