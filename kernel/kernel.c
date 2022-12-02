@@ -3,6 +3,7 @@
 #include "kernel/registry/registry.h"
 #include "kernel/utilities/memory.h"
 #include "kernel/utilities/time.h"
+#include "kernel/utilities/vga_color.h"
 
 void kinit() {
 
@@ -20,8 +21,9 @@ void kinit() {
     print_string("Initializing dynamic memory.\n");
     init_dynamic_mem();
 
-    // print_string("Initializing kernel shell commands.\n");
-    // init_kshell();
+    print_string_color("This is green!\n", create_vga_color(GREEN_TEXT, BLACK_BACKGROUND));
+    print_string_color("This is blue!\n", create_vga_color(BLUE_TEXT, BLACK_BACKGROUND));
+    print_string_color("This has a red background!\n", create_vga_color(WHITE_TEXT, RED_BACKGROUND));
 
     print_string("Initializing keyboard (IRQ 1).\n> ");
     init_keyboard();
@@ -31,7 +33,5 @@ void kinit() {
 void kmain() {
 
     kinit();
-
-    //// print_time(get_kernel_time()); //TODO: Fix
 
 }

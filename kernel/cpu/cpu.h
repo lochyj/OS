@@ -1,8 +1,8 @@
-#include "../inc/types.h"
-#include "../inc/util.h"
+#include "kernel/inc/types.h"
+#include "kernel/inc/util.h"
 
-#include "../drivers/vga.h"
-#include "../drivers/ports.h"
+#include "kernel/drivers/vga.h"
+#include "kernel/drivers/ports.h"
 
 #ifndef CPU_H
 

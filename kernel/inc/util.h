@@ -45,6 +45,13 @@ void int_to_string(int n, char str[]) {
     reverse(str);
 }
 
+void memory_copy(char *source, char *dest, int nbytes) {
+    int i;
+    for (i = 0; i < nbytes; i++) {
+        *(dest + i) = *(source + i);
+    }
+}
+
 void append(char s[], char n) {
     int len = string_length(s);
     s[len] = n;
@@ -61,6 +68,15 @@ int append_int_to_int(int n, int m) {
     return n;
 }
 
+int is_digit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+int is_space(char c) {
+    return c == ' ';
+}
+    
+
 bool backspace(char s[]) {
     int len = string_length(s);
     if (len > 0) {
@@ -71,8 +87,59 @@ bool backspace(char s[]) {
     }
 }
 
+bool is_upper(char c) {
+    return c >= 'A' && c <= 'Z';
+}
+
+bool is_lower(char c) {
+    return c >= 'a' && c <= 'z';
+}
+
+char to_upper(char c) {
+    if (is_lower(c)) {
+        return c - 32;
+    } else {
+        return c;
+    }
+}
+
+char to_lower(char c) {
+    if (is_upper(c)) {
+        return c + 32;
+    } else {
+        return c;
+    }
+}
+
+char* to_upper_string(char s[]) {
+    int len = string_length(s);
+    for (int i = 0; i < len; i++) {
+        s[i] = to_upper(s[i]);
+    }
+    return s;
+}
+
+char* to_lower_string(char s[]) {
+    int len = string_length(s);
+    for (int i = 0; i < len; i++) {
+        s[i] = to_lower(s[i]);
+    }
+    return s;
+}
+
 int char_to_int(char c) {
     return c - '0';
+}
+
+int string_to_int(char string[]) {
+    int i, n, sign;
+    for (i = 0; is_space(string[i]); i++);
+    sign = (string[i] == '-') ? -1 : 1;
+    if (string[i] == '+' || string[i] == '-') i++;
+    for (n = 0; is_digit(string[i]); i++) {
+        n = 10 * n + (string[i] - '0');
+    }
+    return sign * n;
 }
 
 /* K&R

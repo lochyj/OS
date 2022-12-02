@@ -1,9 +1,11 @@
-#include "ports.h"
+#include "kernel/drivers/ports.h"
+#include "kernel/utilities/vga_color.h"
 
-#include "../inc/types.h"
-#include "../inc/util.h"
+#include "kernel/inc/types.h"
+#include "kernel/inc/util.h"
 
 #ifndef VGA_H
+
 #define VGA_H
 
 #define VGA_CTRL_REGISTER 0x3d4
@@ -28,14 +30,15 @@ int get_cursor() {
 }
 
 #define VIDEO_ADDRESS 0xb8000
-#define MAX_ROWS 25             // *Characters
-#define MAX_COLS 80             // *Characters
-#define WHITE_ON_BLACK 0x0f
+#define MAX_ROWS 25             //* 25 x Characters
+#define MAX_COLS 80             //* 80 x Characters
+
+u8 video_color = DEFAULT_COLOR;  // 0x0f is WHITE on BLACK
 
 void set_char_at_video_memory(char character, int offset) {
     unsigned char *videoMemory = (unsigned char *) VIDEO_ADDRESS;
     videoMemory[offset] = character;
-    videoMemory[offset + 1] = WHITE_ON_BLACK;
+    videoMemory[offset + 1] = video_color;
 }
 
 int get_row_from_offset(int offset) {
@@ -48,13 +51,6 @@ int get_offset(int col, int row) {
 
 int move_offset_to_new_line(int offset) {
     return get_offset(0, get_row_from_offset(offset) + 1);
-}
-
-void memory_copy(char *source, char *dest, int nbytes) {
-    int i;
-    for (i = 0; i < nbytes; i++) {
-        *(dest + i) = *(source + i);
-    }
 }
 
 int scroll_ln(int offset) {
@@ -87,6 +83,12 @@ void print_string(char *string) {
         i++;                                            
     }
     set_cursor(offset);
+}
+
+void print_string_color(char *string, vga_color color) {
+    video_color = color;
+    print_string(string);
+    video_color = DEFAULT_COLOR;
 }
 
 void print_int(int num) {

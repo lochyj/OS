@@ -1,6 +1,6 @@
-#include "../inc/types.h"
-#include "../drivers/ports.h"
-#include "../inc/util.h"
+#include "kernel/inc/types.h"
+#include "kernel/drivers/ports.h"
+#include "kernel/inc/util.h"
 
 #ifndef TIME_H
 
@@ -11,10 +11,15 @@ typedef struct Time {
         int minute;
         int hour;
         int month;
-        int year;
+        // int year;
 } Time;
 
-/* Port 0x70 / 0x71 values
+enum {
+    cmos_address = 0x70,
+    cmos_data    = 0x71
+};
+
+/* Port cmos_address / cmos_data values
  Out       Get                 Format
  0x00      Seconds             0–59
  0x02      Minutes             0–59
@@ -29,35 +34,37 @@ typedef struct Time {
  0x0B      Status Register B
 */
 
-void init_time() {
-    port_byte_out(0x70, 0x8B);		    // Select register B, and disable NMI
-    char prev = port_byte_in(0x71);	    // Read the current value of register B
-    port_byte_out(0x70, 0x8B);		    // Set the index again (a read will reset the index to register D)
-    port_byte_out(0x71, prev | 0x40);	// write the previous value ORed with 0x40. This turns on bit 6 of register B
+int get_update_in_progress_flag() {
+    port_byte_out(cmos_address, 0x0A);
+    return (port_byte_in(cmos_data) & 0x80);
+}
 
-    port_byte_out(0x70, 0x0C);	// select register C
-    port_byte_in(0x71);		// just throw away contents
+void init_time() {
+    port_byte_out(cmos_address, 0x8B);		    // Select register B, and disable NMI
+    char prev = port_byte_in(cmos_data);	    // Read the current value of register B
+    port_byte_out(cmos_address, 0x8B);		    // Set the index again (a read will reset the index to register D)
+    port_byte_out(cmos_data, prev | 0x40);	// write the previous value ORed with 0x40. This turns on bit 6 of register B
+
+    port_byte_out(cmos_address, 0x0C);	// select register C
+    port_byte_in(cmos_data);		    // just throw away contents
 }
 
 Time get_kernel_time() {
-    port_byte_out(0x70, 0x00);
-    int second = port_byte_in(0x71);
-    port_byte_out(0x70, 0x02);
-    int minute = port_byte_in(0x71);
-    port_byte_out(0x70, 0x04);
-    int hour = port_byte_in(0x71);
-    port_byte_out(0x70, 0x08);
-    int month = port_byte_in(0x71);
-    port_byte_out(0x70, 0x04);
-    int year = port_byte_in(0x71);       // This is from 0 - 99
-    port_byte_out(0x70, 0x04);
-    /*u8*/ int century = port_byte_in(0x71);    // This is from 19 - 20?
+    while (get_update_in_progress_flag()){};    // Make sure an update isn't in progress
+    port_byte_out(cmos_address, 0x00);
+    u8 second = port_byte_in(cmos_data);
+    port_byte_out(cmos_address, 0x02);
+    u8 minute = port_byte_in(cmos_data);
+    port_byte_out(cmos_address, 0x04);
+    u8 hour = port_byte_in(cmos_data);
+    port_byte_out(cmos_address, 0x08);
+    u8 month = port_byte_in(cmos_data);
+    port_byte_out(cmos_address, 0x04);
+    // int year = port_byte_in(cmos_data);               // This is from 0 - 99
+    // port_byte_out(cmos_address, 0x04);
+    // /*u8*/ int century = port_byte_in(cmos_data);     // This is from 19 - 20?;
 
-    int years;
-    append_int_to_int(years, century);
-    append_int_to_int(years, year);
-
-    Time time = {second, minute, hour, month, years};
+    Time time = {second, minute, hour, month};
     return time;
 }
 
