@@ -19,15 +19,14 @@ We currently don't have instruction for running or building on windows or mac. I
 
 ## Credits
 
-- [Lachlan Jowett](https://github.com/lochyj)
-- [Pritam Zope - Tutorial](https://www.codeproject.com/Articles/1225196/Create-Your-Own-Kernel-In-C-2)
-- [Carlos Fenollosa - Repo](https://github.com/cfenollosa/os-tutorial)
-- [OS Dev - Wiki](https://wiki.osdev.org/Main_Page)
-- [Frank Rosner - Tutorial that I used](https://dev.to/frosnerd)
-- [Max Schlüssel - Ghost - repo](https://github.com/maxdev1/ghost)
-- [The linux contributers - Repo](https://github.com/torvalds/linux)
+- [Lachlan Jowett](https://github.com/lochyj) -- MIT License
+- [Frank Rosner - Tutorial that I used](https://dev.to/frosnerd) -- No License
 
-// TODO: Add licenses to each file from their respective owners
+- [Pritam Zope - Tutorial](https://www.codeproject.com/Articles/1225196/Create-Your-Own-Kernel-In-C-2) -- Inspiration
+- [Carlos Fenollosa - Repo](https://github.com/cfenollosa/os-tutorial) -- Inspiration
+- [OS Dev - Wiki](https://wiki.osdev.org/Main_Page) -- Helped me fix a stupid mistake
+- [Max Schlüssel - Ghost - repo](https://github.com/maxdev1/ghost) -- Inspiration
+- [The linux contributers - Repo](https://github.com/torvalds/linux) -- Inspiration
 
 ## Legal
 
