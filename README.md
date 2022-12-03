@@ -15,7 +15,7 @@ This repository is the collation of knowledge and learnings from tutorials, wiki
 
 ### Windows and Mac
 
-We currently don't have instruction for running or building on windows or mac. If you want to run it on windows or mac, you can use a virtual machine. Additionally, Windows 10+ users can use WSL. I recommend Arch or Ubuntu distros.
+We currently don't have instruction for running or building on windows or mac. If you want to run it on windows or mac, you can use a virtual machine, or a future unimplemented docker version. Additionally, Windows 10+ users can use WSL. I recommend Arch or Ubuntu distros.
 
 ## Credits
 
