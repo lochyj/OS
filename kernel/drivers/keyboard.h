@@ -1,58 +1,134 @@
-// TODO: make not dependant on ../
-
-#include "kernel/inc/types.h"
-#include "kernel/registry/registry.h"
-#include "kernel/cpu/cpu.h"
 #include "kernel/shell.h"
-#include "kernel/drivers/vga.h"
+#include "kernel/cpu/cpu.h"
 #include "kernel/inc/util.h"
+#include "kernel/inc/types.h"
+#include "kernel/drivers/vga.h"
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
-
-#define BACKSPACE 0x0E
-#define ENTER 0x1C
 
 static char key_buffer_previous[256];
 static char key_buffer[256];
 
 #define SC_MAX 57
+#define KB_MAX 59
 
-#define UP_ARROW 0x48       // Source:
-#define DOWN_ARROW 0x50     // https://stackoverflow.com/questions/23188540/what-are-the-scan-codes-for-keyboard-arrows-right-left-down-up
-#define LEFT_ARROW 0x4B
-#define RIGHT_ARROW 0x4D
+enum {
+    ERROR = 0x00,
+    ESCAPE = 0x01,
+    ONE = 0x02,
+    TWO = 0x03,
+    THREE = 0x04,
+    FOUR = 0x05,
+    FIVE = 0x06,
+    SIX = 0x07,
+    SEVEN = 0x08,
+    EIGHT = 0x09,
+    NINE = 0x0A,
+    ZERO = 0x0B,
+    MINUS = 0x0C,
+    EQUALS = 0x0D,
+    BACKSPACE = 0x0E,
+    TAB = 0x0F,
+    Q = 0x10,
+    W = 0x11,
+    E = 0x12,
+    R = 0x13,
+    T = 0x14,
+    Y = 0x15,
+    U = 0x16,
+    I = 0x17,
+    O = 0x18,
+    P = 0x19,
+    LEFT_BRACKET = 0x1A,
+    RIGHT_BRACKET = 0x1B,
+    ENTER = 0x1C,
+    LEFT_CONTROL = 0x1D,
+    A = 0x1E,
+    S = 0x1F,
+    D = 0x20,
+    F = 0x21,
+    G = 0x22,
+    H = 0x23,
+    J = 0x24,
+    K = 0x25,
+    L = 0x26,
+    SEMICOLON = 0x27,
+    SINGLE_QUOTE = 0x28,
+    GRAVE = 0x29,
+    LEFT_SHIFT = 0x2A,
+    BACKSLASH = 0x2B,
+    Z = 0x2C,
+    X = 0x2D,
+    C = 0x2E,
+    V = 0x2F,
+    B = 0x30,
+    N = 0x31,
+    M = 0x32,
+    COMMA = 0x33,
+    PERIOD = 0x34,
+    FORWARD_SLASH = 0x35,
+    RIGHT_SHIFT = 0x36,
+    NUMPAD_ASTERISK = 0x37,
+    LEFT_ALT = 0x38,
+    SPACE = 0x39,
+    CAPS_LOCK = 0x3A,
+    F1 = 0x3B,
+    F2 = 0x3C,
+    F3 = 0x3D,
+    F4 = 0x3E,
+    F5 = 0x3F,
+    F6 = 0x40,
+    F7 = 0x41,
+    F8 = 0x42,
+    F9 = 0x43,
+    F10 = 0x44,
+    NUM_LOCK = 0x45,
+    SCROLL_LOCK = 0x46,
+    NUMPAD_7 = 0x47,
+    NUMPAD_8 = 0x48,
+    NUMPAD_9 = 0x49,
+    NUMPAD_MINUS = 0x4A,
+    NUMPAD_4 = 0x4B,
+    NUMPAD_5 = 0x4C,
+    NUMPAD_6 = 0x4D,
+    NUMPAD_PLUS = 0x4E,
+    NUMPAD_1 = 0x4F,
+    NUMPAD_2 = 0x50,
+    NUMPAD_3 = 0x51,
+    NUMPAD_0 = 0x52,
+    NUMPAD_PERIOD = 0x53,
+    F11 = 0x57,
+    F12 = 0x58,
+
+    ARROWS = 0x244,
+    LEFT_ARROW = 0x4B,
+    RIGHT_ARROW = 0x4D,
+    UP_ARROW = 0x48,
+    DOWN_ARROW = 0x50
+};
+
 
 typedef struct keyboard_key {
     u8 scancode;
     bool pressed;
 } keyboard_key;
+
 typedef struct keyboard_register {
-    keyboard_key error; keyboard_key esc; keyboard_key one; keyboard_key two; keyboard_key three; 
-    keyboard_key four; keyboard_key five; keyboard_key six; keyboard_key seven; keyboard_key eight;
-    keyboard_key nine; keyboard_key zero; keyboard_key dash; keyboard_key equals; keyboard_key backspace;
-    keyboard_key tab; keyboard_key q; keyboard_key w; keyboard_key e; keyboard_key r; 
-    keyboard_key t; keyboard_key y; keyboard_key u; keyboard_key i; keyboard_key o;
-    keyboard_key p; keyboard_key open_bracket; keyboard_key close_bracket; keyboard_key enter; keyboard_key ctrl;
-    keyboard_key a; keyboard_key s; keyboard_key d; keyboard_key f; keyboard_key g;
-    keyboard_key h; keyboard_key j; keyboard_key k; keyboard_key l; keyboard_key semicolon;
-    keyboard_key single_quote; keyboard_key backtick; keyboard_key left_shift; keyboard_key backslash; keyboard_key z;
-    keyboard_key x; keyboard_key c; keyboard_key v; keyboard_key b; keyboard_key n;
-    keyboard_key m; keyboard_key comma; keyboard_key period; keyboard_key forward_slash; keyboard_key right_shift;
-    keyboard_key print_screen; keyboard_key alt; keyboard_key space;
+    keyboard_key keys[KB_MAX];
 } keyboard_register;
 
-keyboard_register init_keyboard_register() {
-    keyboard_register reg = {
-        {0x00, false},{0x01, false},{0x02, false},{0x03, false},{0x04, false},{0x05, false},{0x06, false},{0x07, false},
-        {0x08, false},{0x09, false},{0x0A, false},{0x0B, false},{0x0C, false},{0x0D, false},{0x19, false},{0x1A, false},
-        {0x1B, false},{0x1C, false},{0x1D, false},{0x1E, false},{0x1F, false},{0x20, false},{0x21, false},{0x22, false},
-        {0x23, false},{0x24, false},{0x25, false},{0x26, false},{0x27, false},{0x28, false},{0x29, false},{0x2A, false},
-        {0x2B, false},{0x2C, false},{0x2D, false},{0x2E, false},{0x2F, false},{0x30, false},{0x31, false},{0x32, false},
-        {0x33, false},{0x34, false},{0x35, false},{0x36, false},{0x37, false},{0x38, false},{0x39, false}
-    };
-    return reg;
+bool init_keyboard_register(keyboard_register reg) {
+
+    for (int i = 0; i <= KB_MAX; i++) {
+        keyboard_key key = {i * 0x01, false};
+        reg.keys[i] = key;
+    }
+
+    return 0;
 }
+
+keyboard_register keyboard_registry;
 
 // TODO: This is not working at the moment...
 
@@ -150,17 +226,20 @@ void replace_buffer(char buffer[256], char replacement[256]) {
     print_string(replacement);
 }
 
+u8 prev_code;
+
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
 
-    
-
-    // print_string(" 0x");
-    // print_hex(scancode);
+    print_string(" 0x");
+    print_hex(scancode);
+    print_string(" ");
 
     //* Function temp values
     bool c_shift = false;
     bool c_ctrl = false;
+
+    bool arrow = false;
 
     // If the last character returned was a shift or ctrl, set the temp values to true and then revert the shift and ctrl values to false
     if (shift == true) {
@@ -172,22 +251,37 @@ static void keyboard_callback(registers_t *regs) {
     shift = false;
     ctrl = false;
 
+    if (scancode == 0x224) {
+        arrow = true;
+    }
+
+    if (prev_code == 0x224) {
+        if (scancode == UP_ARROW) {
+            print_string("UP_ARROW");
+            replace_buffer(key_buffer, key_buffer_previous);
+        }
+    }
+
+    if (scancode < SC_MAX) {
+        keyboard_registry.keys[scancode].pressed = true;
+    } else if (scancode > SC_MAX) {
+        keyboard_registry.keys[scancode - 0x80].pressed = false;
+    }
+
     if (scancode > SC_MAX) {
+        if ( scancode > SC_MAX + 0x80);
         // scancode -= 0x80;
         // if (scancode > SC_MAX) {
         //     return;
         // }
         return;
     };
-
-    if (scancode == UP_ARROW) {
-        print_string("UP_ARROW");
-        replace_buffer(key_buffer, key_buffer_previous);
-    } else if (scancode == BACKSPACE) {
+    
+    if (scancode == BACKSPACE) {
         if (backspace(key_buffer)) {
             print_backspace();
         }
-    } else if (scancode == ENTER) {
+    } else if (scancode ==ENTER) {
         print_nl();
         execute_shell_input(key_buffer);
         memory_copy(key_buffer_previous, key_buffer, 256);
@@ -213,6 +307,8 @@ static void keyboard_callback(registers_t *regs) {
         char str[2] = {letter, '\0'};
         print_string(str);
     }
+
+    prev_code = scancode;
 }
 
 void init_keyboard() {

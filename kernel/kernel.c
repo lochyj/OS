@@ -15,6 +15,9 @@ void kinit() {
     print_string("Enabling CMOS read for RDT on port 0x70 and 0x71.\n");
     init_time();
 
+    print_string("Installing keyboard registry.\n");
+    init_keyboard_register(keyboard_registry);
+
     print_string("Enabling external interrupts.\n");
     asm volatile("sti");
 
