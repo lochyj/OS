@@ -10,7 +10,6 @@ This repository is the collation of knowledge and learnings from tutorials, wiki
 ## Running
 
 ### Linux
-    To run the kernel, you need to have qemu installed. Then run `./run.sh` in the root directory of the project.
     To build the kernel, you need to have qemu installed. Then run `./build.sh` in the root directory of the project.
 
 ### Windows and Mac
