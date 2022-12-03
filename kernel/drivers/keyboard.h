@@ -23,6 +23,37 @@ static char key_buffer[256];
 #define LEFT_ARROW 0x4B
 #define RIGHT_ARROW 0x4D
 
+typedef struct keyboard_key {
+    u8 scancode;
+    bool pressed;
+} keyboard_key;
+typedef struct keyboard_register {
+    keyboard_key error; keyboard_key esc; keyboard_key one; keyboard_key two; keyboard_key three; 
+    keyboard_key four; keyboard_key five; keyboard_key six; keyboard_key seven; keyboard_key eight;
+    keyboard_key nine; keyboard_key zero; keyboard_key dash; keyboard_key equals; keyboard_key backspace;
+    keyboard_key tab; keyboard_key q; keyboard_key w; keyboard_key e; keyboard_key r; 
+    keyboard_key t; keyboard_key y; keyboard_key u; keyboard_key i; keyboard_key o;
+    keyboard_key p; keyboard_key open_bracket; keyboard_key close_bracket; keyboard_key enter; keyboard_key ctrl;
+    keyboard_key a; keyboard_key s; keyboard_key d; keyboard_key f; keyboard_key g;
+    keyboard_key h; keyboard_key j; keyboard_key k; keyboard_key l; keyboard_key semicolon;
+    keyboard_key single_quote; keyboard_key backtick; keyboard_key left_shift; keyboard_key backslash; keyboard_key z;
+    keyboard_key x; keyboard_key c; keyboard_key v; keyboard_key b; keyboard_key n;
+    keyboard_key m; keyboard_key comma; keyboard_key period; keyboard_key forward_slash; keyboard_key right_shift;
+    keyboard_key print_screen; keyboard_key alt; keyboard_key space;
+} keyboard_register;
+
+keyboard_register init_keyboard_register() {
+    keyboard_register reg = {
+        {0x00, false},{0x01, false},{0x02, false},{0x03, false},{0x04, false},{0x05, false},{0x06, false},{0x07, false},
+        {0x08, false},{0x09, false},{0x0A, false},{0x0B, false},{0x0C, false},{0x0D, false},{0x19, false},{0x1A, false},
+        {0x1B, false},{0x1C, false},{0x1D, false},{0x1E, false},{0x1F, false},{0x20, false},{0x21, false},{0x22, false},
+        {0x23, false},{0x24, false},{0x25, false},{0x26, false},{0x27, false},{0x28, false},{0x29, false},{0x2A, false},
+        {0x2B, false},{0x2C, false},{0x2D, false},{0x2E, false},{0x2F, false},{0x30, false},{0x31, false},{0x32, false},
+        {0x33, false},{0x34, false},{0x35, false},{0x36, false},{0x37, false},{0x38, false},{0x39, false}
+    };
+    return reg;
+}
+
 // TODO: This is not working at the moment...
 
 // char vga_font_array[] {
@@ -86,8 +117,6 @@ char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
                          "LShift", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".",
                          "/", "RShift", "Keypad *", "LAlt", "Spacebar"};
 
-// Yes I know this is a bad way to do this, but it works for now
-// TODO: make this a function and not have two arrays.
 char sc_ascii_upper[] = {
                          '?', '~', '!', '@', '#', '$', '%', '^',
                          '&', '*', '(', ')', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
