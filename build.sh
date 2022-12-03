@@ -23,7 +23,7 @@ echo "---- Compiling C ----"
 
 # Compiling the C code
 
-gcc -m32 -g -fno-pie -ffreestanding -fno-stack-protector -I . -I ./stdlib -c ./kernel/kernel.c -o ./out/kernel.out
+gcc -m32 -g -fno-pie -ffreestanding -fno-stack-protector -I . -I ./libc -c ./kernel/kernel.c -o ./out/kernel.out
 
 echo "---- Linking output files ----"
 

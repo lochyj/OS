@@ -68,6 +68,11 @@ int append_int_to_int(int n, int m) {
     return n;
 }
 
+int hex_to_int(u8 hex) {
+    int n = (int) hex;
+    return n;
+}
+
 int is_digit(char c) {
     return c >= '0' && c <= '9';
 }

@@ -10,7 +10,7 @@ typedef struct Time {
         int second;
         int minute;
         int hour;
-        int month;
+        // int month;
         // int year;
 } Time;
 
@@ -43,28 +43,31 @@ void init_time() {
     port_byte_out(cmos_address, 0x8B);		    // Select register B, and disable NMI
     char prev = port_byte_in(cmos_data);	    // Read the current value of register B
     port_byte_out(cmos_address, 0x8B);		    // Set the index again (a read will reset the index to register D)
-    port_byte_out(cmos_data, prev | 0x40);	// write the previous value ORed with 0x40. This turns on bit 6 of register B
-
-    port_byte_out(cmos_address, 0x0C);	// select register C
-    port_byte_in(cmos_data);		    // just throw away contents
+    port_byte_out(cmos_data, prev | 0x40);	    // Write the previous value ORed with 0x40. This turns on bit 6 of register B
 }
 
 Time get_kernel_time() {
+    init_time();
+    
     while (get_update_in_progress_flag()){};    // Make sure an update isn't in progress
+
+    port_byte_out(cmos_address, 0x0C);	// Select register C
+    port_byte_in(cmos_data);		    // Throw away contents.
+
     port_byte_out(cmos_address, 0x00);
-    u8 second = port_byte_in(cmos_data);
+    int second = port_byte_in(cmos_data);
     port_byte_out(cmos_address, 0x02);
-    u8 minute = port_byte_in(cmos_data);
+    int minute = port_byte_in(cmos_data);
     port_byte_out(cmos_address, 0x04);
-    u8 hour = port_byte_in(cmos_data);
+    int hour = port_byte_in(cmos_data);
     port_byte_out(cmos_address, 0x08);
-    u8 month = port_byte_in(cmos_data);
-    port_byte_out(cmos_address, 0x04);
+    // int month = port_byte_in(cmos_data);
+    // port_byte_out(cmos_address, 0x04);
     // int year = port_byte_in(cmos_data);               // This is from 0 - 99
     // port_byte_out(cmos_address, 0x04);
     // /*u8*/ int century = port_byte_in(cmos_data);     // This is from 19 - 20?;
 
-    Time time = {second, minute, hour, month};
+    Time time = {second, minute, hour};
     return time;
 }
 

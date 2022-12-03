@@ -119,4 +119,10 @@ void print_backspace() {
     set_cursor(newCursor);
 }
 
+void print_hex(u8 num) {
+    int buffer;
+    buffer = hex_to_int(num);
+    print_int(buffer);
+}
+
 #endif

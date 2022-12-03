@@ -13,13 +13,19 @@
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
 
+static char key_buffer_previous[256];
 static char key_buffer[256];
 
 #define SC_MAX 57
 
+#define UP_ARROW 0x48       // Source:
+#define DOWN_ARROW 0x50     // https://stackoverflow.com/questions/23188540/what-are-the-scan-codes-for-keyboard-arrows-right-left-down-up
+#define LEFT_ARROW 0x4B
+#define RIGHT_ARROW 0x4D
+
 // TODO: This is not working at the moment...
 
-// char vga_font_array {
+// char vga_font_array[] {
 //     '☺', '☻', '♥', '♦', '♣',
 //      '♠', '•', '◘', '○', '◙',
 //       '♂', '♀', '♪', '♫', '☼',
@@ -82,18 +88,21 @@ char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
 
 // Yes I know this is a bad way to do this, but it works for now
 // TODO: make this a function and not have two arrays.
-char sc_ascii_upper[] = {'?', '?', '1', '2', '3', '4', '5', '6',
-                         '7', '8', '9', '0', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
-                         'U', 'I', 'O', 'P', '[', ']', '?', '?', 'A', 'S', 'D', 'F', 'G',
-                         'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V',
-                         'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
+char sc_ascii_upper[] = {
+                         '?', '~', '!', '@', '#', '$', '%', '^',
+                         '&', '*', '(', ')', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
+                         'U', 'I', 'O', 'P', '{', '}', '?', '?', 'A', 'S', 'D', 'F', 'G',
+                         'H', 'J', 'K', 'L', ':', '"', '`', '?', '|', 'Z', 'X', 'C', 'V',
+                         'B', 'N', 'M', '<', '>', '?', '?', '?', '?', ' '
+                         };
 
-char sc_ascii_lower[] = {'?', '?', '1', '2', '3', '4', '5', '6',
+char sc_ascii_lower[] = {
+                         '?', '~', '1', '2', '3', '4', '5', '6',
                          '7', '8', '9', '0', '-', '=', '?', '?', 'q', 'w', 'e', 'r', 't', 'y',
                          'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
                          'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
-                         'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '};
-
+                         'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '
+                         };
 
 void scancode_to_ascii(u8 scancode) {
     char letter = sc_ascii_upper[(int) scancode];
@@ -104,8 +113,21 @@ void scancode_to_ascii(u8 scancode) {
 bool shift = false;
 bool ctrl = false;
 
+void replace_buffer(char buffer[256], char replacement[256]) {
+    int length = string_length(buffer);
+    for (int i = 0; i < length; i++) {
+        print_backspace();
+    }
+    print_string(replacement);
+}
+
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
+
+    
+
+    // print_string(" 0x");
+    // print_hex(scancode);
 
     //* Function temp values
     bool c_shift = false;
@@ -121,14 +143,25 @@ static void keyboard_callback(registers_t *regs) {
     shift = false;
     ctrl = false;
 
-    if (scancode > SC_MAX) return;
-    if (scancode == BACKSPACE) {
+    if (scancode > SC_MAX) {
+        // scancode -= 0x80;
+        // if (scancode > SC_MAX) {
+        //     return;
+        // }
+        return;
+    };
+
+    if (scancode == UP_ARROW) {
+        print_string("UP_ARROW");
+        replace_buffer(key_buffer, key_buffer_previous);
+    } else if (scancode == BACKSPACE) {
         if (backspace(key_buffer)) {
             print_backspace();
         }
     } else if (scancode == ENTER) {
         print_nl();
         execute_shell_input(key_buffer);
+        memory_copy(key_buffer_previous, key_buffer, 256);
         key_buffer[0] = '\0';
     } else {
         if (compare_string(sc_name[(int) scancode], "LShift") == 0 || compare_string(sc_name[(int) scancode], "RShift")  == 0) {
@@ -146,6 +179,7 @@ static void keyboard_callback(registers_t *regs) {
         } else {
             letter = sc_ascii_lower[(int) scancode];
         }
+        
         append(key_buffer, letter);
         char str[2] = {letter, '\0'};
         print_string(str);

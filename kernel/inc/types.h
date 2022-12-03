@@ -23,4 +23,11 @@ typedef int bool;
 #define NULL = NULL_POINTER
 #define NUL '\0'
 
+typedef struct va_list {
+    u32 gp_offset;
+    u32 fp_offset;
+    void *overflow_arg_area;
+    void *reg_save_area;
+} va_list;
+
 #endif
