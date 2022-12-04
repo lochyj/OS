@@ -2,8 +2,12 @@
     "C_Cpp.errorSquiggles": "Disabled", // This is annoying and yet helpful at the same time : disable or enable it as you like
     "prettier.endOfLine": "lf",
     "files.associations": {
+        "*.ejs": "html",
         "*.h": "c",
-        "*.c": "c"
+        "*.c": "c",
+        "iterator": "c",
+        "xutility": "c",
+        "xstring": "c"
     },
     "cSpell.words": [
         "IDFK",

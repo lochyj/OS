@@ -1,6 +1,7 @@
-#include "kernel/inc/types.h"
 #include "kernel/inc/util.h"
 #include "kernel/utilities/time.h"
+
+#include <stdint.h>
 
 #ifndef SHELL_H
 #define SHELL_H

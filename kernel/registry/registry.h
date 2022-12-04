@@ -1,6 +1,6 @@
 //TODO: move this to the utilities folder for a more general use.
 
-#include "../inc/types.h"
+#include <stdint.h>
 #include "../inc/util.h"
 
 #ifndef REGISTRY_H

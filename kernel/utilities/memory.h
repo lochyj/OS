@@ -1,6 +1,6 @@
-#include "../inc/types.h"
-#include "../drivers/vga.h"
-#include "../inc/util.h"
+#include <stdint.h>
+#include "kernel/drivers/vga.h"
+#include "kernel/inc/util.h"
 
 #ifndef MEMORY_H
 

@@ -1,23 +1,31 @@
 
-
 #ifndef _STDIO_H
 
 #define _STDIO_H
 
-#include "../src/printf.c"
-#include "../src/println.c"
+#include "../src/stdio.c"
 
 /**
- * Formatted printing to <stdout>
- *
- * @param format
- * 		format string to use
- * @param args
- * 		optional list of arguments
- * @return
- *      if the function succeeds, the total number of characters written is returned.
+ * @brief       Prints a formatted string to the standard output.
+ * 
+ * @param c     The format string.
  */
-int printf(const char* format, ...);
+void putc(char c);
+
+/**
+ * @brief       Prints a formatted string to the standard output.
+ * 
+ * @param str   The formatted string.
+ */
+void puts(const char* str);
+
+/**
+ * @brief           Prints a formatted string to the screen.
+ * 
+ * @param format    The format string.
+ * @param ...       The arguments to print into the format string.
+ */
+void printf(const char* format, ...);
 
 /**
  * The same as <printf>, appending a new-line.
@@ -26,6 +34,9 @@ int printf(const char* format, ...);
  * 		EOF if printing the new-line failed,
  * 		otherwise see <vprintf>
  */
-int println(const char* format, ...);
+void println(const char* format, ...);
+
+
+
 
 #endif

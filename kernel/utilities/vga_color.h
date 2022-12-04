@@ -1,5 +1,5 @@
 
-#include "kernel/inc/types.h"
+#include <stdint.h>
 
 #ifndef VGA_COLOR_H
 

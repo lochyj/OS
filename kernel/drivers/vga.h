@@ -1,8 +1,9 @@
 #include "kernel/drivers/ports.h"
 #include "kernel/utilities/vga_color.h"
-
-#include "kernel/inc/types.h"
 #include "kernel/inc/util.h"
+
+#include <stdint.h>
+
 
 #ifndef VGA_H
 
@@ -82,6 +83,23 @@ void print_string(char *string) {
         }
         i++;                                            
     }
+    set_cursor(offset);
+}
+
+void print_char(char chr) {
+    int offset = get_cursor();
+
+    if (offset >= MAX_ROWS * MAX_COLS * 2) {
+        offset = scroll_ln(offset);
+    }
+
+    if (chr == '\n') {
+        offset = move_offset_to_new_line(offset);
+    } else {
+        set_char_at_video_memory(chr, offset);
+        offset += 2;
+    }
+
     set_cursor(offset);
 }
 

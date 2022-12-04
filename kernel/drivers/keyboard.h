@@ -1,8 +1,9 @@
 #include "kernel/shell.h"
 #include "kernel/cpu/cpu.h"
 #include "kernel/inc/util.h"
-#include "kernel/inc/types.h"
 #include "kernel/drivers/vga.h"
+
+#include <stdint.h>
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
@@ -119,72 +120,17 @@ typedef struct keyboard_register {
 } keyboard_register;
 
 bool init_keyboard_register(keyboard_register reg) {
-
-    for (int i = 0; i <= KB_MAX; i++) {
-        keyboard_key key = {i * 0x01, false};
+    u8 keyid = 0x00;
+    for (int i = 0; i < KB_MAX; i++) {
+        keyboard_key key = {keyid, false};
         reg.keys[i] = key;
+        keyid = keyid + 0x01;
     }
 
     return 0;
 }
 
 keyboard_register keyboard_registry;
-
-// TODO: This is not working at the moment...
-
-// char vga_font_array[] {
-//     '☺', '☻', '♥', '♦', '♣',
-//      '♠', '•', '◘', '○', '◙',
-//       '♂', '♀', '♪', '♫', '☼',
-//        '►', '◄', '↕', '‼', '¶',
-//         '§', '▬', '↨', '↑', '↓',
-//          '→', '←', '∟', '↔', '▲',
-//           '▼', '!', '"', '#', '$',
-//            '%', '&', '\'', '(', ')',
-//             '*', '+', ',', '-', '.',
-//              '/', '0', '1', '2', '3',
-//               '4', '5', '6', '7', '8',
-//                '9', ':', ';', '<', '=',
-//                 '>', '?', '@', 'A', 'B',
-//                  'C', 'D', 'E', 'F', 'G',
-//                   'H', 'I', 'J', 'K', 'L',
-//                    'M', 'N', 'O', 'P', 'Q',
-//                     'R', 'S', 'T', 'U', 'V',
-//                      'W', 'X', 'Y', 'Z', '[',
-//                       '\\', ']', '^', '_', '`',
-//                        'a', 'b', 'c', 'd', 'e',
-//                         'f', 'g', 'h', 'i', 'j',
-//                          'k', 'l', 'm', 'n', 'o',
-//                           'p', 'q', 'r', 's', 't',
-//                            'u', 'v', 'w', 'x', 'y',
-//                             'z', '{', '|', '}', '~',
-//                              '⌂', 'Ç', 'ü', 'é', 'â',
-//                               'ä', 'à', 'å', 'ç', 'ê',
-//                                'ë', 'è', 'ï', 'î', 'ì',
-//                                 'Ä', 'Å', 'É', 'æ', 'Æ',
-//                                  'ô', 'ö', 'ò', 'û', 'ù',
-//                                   'ÿ', 'Ö', 'Ü', '¢', '£',
-//                                    '¥', '₧', 'ƒ', 'á', 'í',
-//                                     'ó', 'ú', 'ñ', 'Ñ', 'ª',
-//                                      'º', '¿', '⌐', '¬', '½',
-//                                       '¼', '¡', '«', '»', '░',
-//                                        '▒', '▓', '│', '┤', '╡',
-//                                         '╢', '╖', '╕', '╣', '║',
-//                                          '╗', '╝', '╜', '╛', '┐',
-//                                           '└', '┴', '┬', '├', '─',
-//                                            '┼', '╞', '╟', '╚', '╔',
-//                                             '╩', '╦', '╠', '═', '╬',
-//                                              '╧', '╨', '╤', '╥', '╙',
-//                                               '╘', '╒', '╓', '╫', '╪',
-//                                                '┘', '┌', '█', '▄', '▌',
-//                                                 '▐', '▀', 'ɑ', 'ϐ', 'ᴦ',
-//                                                  'ᴨ', '∑', 'ơ', 'µ', 'ᴛ',
-//                                                   'ɸ', 'ϴ', 'Ω', 'ẟ', '∞',
-//                                                    '∅', '∈', '∩', '≡', '±',
-//                                                     '≥', '≤', '⌠', '⌡', '÷',
-//                                                      '≈', '°', '∙', '·', '√',
-//                                                       'ⁿ', '²', '■',' '
-// };
 
 char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
                          "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
@@ -228,18 +174,18 @@ void replace_buffer(char buffer[256], char replacement[256]) {
 
 u8 prev_code;
 
+bool arrow = false;
+
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
 
-    print_string(" 0x");
-    print_hex(scancode);
-    print_string(" ");
+    // print_string(" 0x");
+    // print_hex(scancode);
+    // print_string(" ");
 
     //* Function temp values
     bool c_shift = false;
     bool c_ctrl = false;
-
-    bool arrow = false;
 
     // If the last character returned was a shift or ctrl, set the temp values to true and then revert the shift and ctrl values to false
     if (shift == true) {
@@ -250,10 +196,6 @@ static void keyboard_callback(registers_t *regs) {
 
     shift = false;
     ctrl = false;
-
-    if (scancode == 0x224) {
-        arrow = true;
-    }
 
     if (prev_code == 0x224) {
         if (scancode == UP_ARROW) {
