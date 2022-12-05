@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdint.h>
 #include "kernel/drivers/ports.h"
 #include "kernel/inc/util.h"
@@ -7,9 +8,9 @@
 #define TIME_H
 
 typedef struct Time {
-        int second;
-        int minute;
-        int hour;
+        u8 second;
+        u8 minute;
+        u8 hour;
         // int month;
         // int year;
 } Time;
@@ -35,49 +36,61 @@ enum {
 */
 
 int get_update_in_progress_flag() {
-    port_byte_out(cmos_address, 0x0A);
+    port_byte_out(cmos_address, 0x0B);
     return (port_byte_in(cmos_data) & 0x80);
 }
 
-void init_time() {
-    port_byte_out(cmos_address, 0x8B);		    // Select register B, and disable NMI
-    char prev = port_byte_in(cmos_data);	    // Read the current value of register B
-    port_byte_out(cmos_address, 0x8B);		    // Set the index again (a read will reset the index to register D)
-    port_byte_out(cmos_data, prev | 0x40);	    // Write the previous value ORed with 0x40. This turns on bit 6 of register B
+unsigned char get_RTC_register(int reg) {
+    port_byte_out(cmos_address, reg);
+    return port_byte_in(cmos_data);
 }
 
 Time get_kernel_time() {
-    init_time();
+    // init_time();
     
     while (get_update_in_progress_flag()){};    // Make sure an update isn't in progress
 
-    port_byte_out(cmos_address, 0x0C);	// Select register C
-    port_byte_in(cmos_data);		    // Throw away contents.
-
     port_byte_out(cmos_address, 0x00);
-    int second = port_byte_in(cmos_data);
+    u8 second = port_byte_in(cmos_data);
     port_byte_out(cmos_address, 0x02);
-    int minute = port_byte_in(cmos_data);
+    u8 minute = port_byte_in(cmos_data);
     port_byte_out(cmos_address, 0x04);
-    int hour = port_byte_in(cmos_data);
+    u8 hour = port_byte_in(cmos_data);
+
+
     port_byte_out(cmos_address, 0x08);
-    // int month = port_byte_in(cmos_data);
-    // port_byte_out(cmos_address, 0x04);
-    // int year = port_byte_in(cmos_data);               // This is from 0 - 99
-    // port_byte_out(cmos_address, 0x04);
-    // /*u8*/ int century = port_byte_in(cmos_data);     // This is from 19 - 20?;
+    u8 month = port_byte_in(cmos_data);
+
+    // if month is betweeen october and april, its daylight savings time
+    if (month < 10 || month >= 4) {
+        hour -= 0x01;
+    }
 
     Time time = {second, minute, hour};
+
+    u8 registerB = get_RTC_register(0x0B);
+
+    if (!(registerB & 0x04)){
+        second = (second & 0x0F) + ((second / 16) * 10);
+        minute = (minute & 0x0F) + ((minute / 16) * 10);
+        hour = ( (hour & 0x0F) + (((hour & 0x70) / 16) * 10) ) | (hour & 0x80);
+        // day = (day & 0x0F) + ((day / 16) * 10);
+        // month = (month & 0x0F) + ((month / 16) * 10);
+        // year = (year & 0x0F) + ((year / 16) * 10);
+        // if(century_register != 0) {
+        //         century = (century & 0x0F) + ((century / 16) * 10);
+        // }
+    }
+
+    if (!(registerB & 0x02) && (hour & 0x80)) {
+        hour = ((hour & 0x7F) + 12) % 24;
+    }
+
     return time;
 }
 
 void print_time(Time time) {
-    print_int(time.hour);
-    print_string(":");
-    print_int(time.minute);
-    print_string(":");
-    print_int(time.second);
-    print_nl();
+    printf("%d:%d:%d\n", time.hour, time.minute, time.second);
 }
 
 #endif

@@ -80,7 +80,6 @@ int is_digit(char c) {
 int is_space(char c) {
     return c == ' ';
 }
-    
 
 bool backspace(char s[]) {
     int len = string_length(s);

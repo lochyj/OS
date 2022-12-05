@@ -100,37 +100,14 @@ enum {
     NUMPAD_0 = 0x52,
     NUMPAD_PERIOD = 0x53,
     F11 = 0x57,
-    F12 = 0x58,
+    F12 = 0x58
 
-    ARROWS = 0x244,
-    LEFT_ARROW = 0x4B,
-    RIGHT_ARROW = 0x4D,
-    UP_ARROW = 0x48,
-    DOWN_ARROW = 0x50
+    // ARROWS = 0x244,
+    // LEFT_ARROW = 0x4B,
+    // RIGHT_ARROW = 0x4D,
+    // UP_ARROW = 0x48,
+    // DOWN_ARROW = 0x50
 };
-
-
-typedef struct keyboard_key {
-    u8 scancode;
-    bool pressed;
-} keyboard_key;
-
-typedef struct keyboard_register {
-    keyboard_key keys[KB_MAX];
-} keyboard_register;
-
-bool init_keyboard_register(keyboard_register reg) {
-    u8 keyid = 0x00;
-    for (int i = 0; i < KB_MAX; i++) {
-        keyboard_key key = {keyid, false};
-        reg.keys[i] = key;
-        keyid = keyid + 0x01;
-    }
-
-    return 0;
-}
-
-keyboard_register keyboard_registry;
 
 enum {
     CHAR_CENTERED_SQUARE = 0xFE,
@@ -226,15 +203,40 @@ enum {
     CHAR_LATIN_U_CIRCUMFLEX_LOWER = 0xA6,
     CHAR_LATIN_O_GRAVE = 0xA5,
     CHAR_LATIN_O_DIAERESIS_LOWER = 0xA4,
-    CHAR_LATIN_O_CIRCUMFLEX = 0xA3,
+    CHAR_LATIN_O_CIRCUMFLEX = 0xA3
 };
 
-char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
-                         "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
-                         "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Lctrl",
-                         "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`",
-                         "LShift", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".",
-                         "/", "RShift", "Keypad *", "LAlt", "Spacebar"};
+
+typedef struct keyboard_key {
+    u8 scancode;
+    bool pressed;
+} keyboard_key;
+
+typedef struct keyboard_register {
+    keyboard_key keys[KB_MAX];
+} keyboard_register;
+
+bool init_keyboard_register(keyboard_register reg) {
+    u8 keyid = 0x00;
+    for (int i = 0; i < KB_MAX; i++) {
+        keyboard_key key = {keyid, false};
+        reg.keys[i] = key; 
+        keyid = keyid + 0x01;
+    }
+
+    return 0;
+}
+
+keyboard_register keyboard_registry;
+
+char *sc_name[] = {
+                   "ERROR", "Esc", "1", "2", "3", "4", "5", "6",
+                   "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
+                   "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Lctrl",
+                   "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`",
+                   "LShift", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".",
+                   "/", "RShift", "Keypad *", "LAlt", "Spacebar"
+                   };
 
 char sc_ascii_upper[] = {
                          '?', '~', '!', '@', '#', '$', '%', '^',
@@ -258,9 +260,6 @@ void scancode_to_ascii(u8 scancode) {
     char str[2] = {letter, '\0'};
 }
 
-bool shift = false;
-bool ctrl = false;
-
 void replace_buffer(char buffer[256], char replacement[256]) {
     int length = string_length(buffer);
     for (int i = 0; i < length; i++) {
@@ -269,9 +268,9 @@ void replace_buffer(char buffer[256], char replacement[256]) {
     print_string(replacement);
 }
 
-u8 prev_code;
-
-bool arrow = false;
+bool shift = false;
+bool ctrl = false;
+bool alt = false;
 
 static void keyboard_callback(registers_t *regs) {
     u8 scancode = port_byte_in(0x60);
@@ -280,27 +279,21 @@ static void keyboard_callback(registers_t *regs) {
     // print_hex(scancode);
     // print_string(" ");
 
-    //* Function temp values
-    bool c_shift = false;
-    bool c_ctrl = false;
 
-    // If the last character returned was a shift or ctrl, set the temp values to true and then revert the shift and ctrl values to false
-    if (shift == true) {
-        c_shift = true;
-    } else if (ctrl == true) {
-        c_ctrl = true;
-    }
-
-    shift = false;
-    ctrl = false;
-
-    if (prev_code == 0x224) {
-        if (scancode == UP_ARROW) {
-            print_string("UP_ARROW");
-            replace_buffer(key_buffer, key_buffer_previous);
-        }
-    }
-
+    // if (scancode == LSHIFT || scancode == RSHIFT) {
+    //     shift = true;
+    // } else if (scancode == LSHIFT + 0x80 || scancode == RSHIFT + 0x80) {
+    //     shift = false;
+    // } else if (scancode == LCTRL || scancode == RCTRL) {
+    //     ctrl = true;
+    // } else if (scancode == LCTRL + 0x80 || scancode == RCTRL + 0x80) {
+    //     ctrl = false;
+    // } else if (scancode == LALT || scancode == RALT) {
+    //     alt = true;
+    // } else if (scancode == LALT + 0x80 || scancode == RALT + 0x80) {
+    //     alt = false;
+    // }
+    
     if (scancode < SC_MAX) {
         keyboard_registry.keys[scancode].pressed = true;
     } else if (scancode > SC_MAX) {
@@ -326,17 +319,10 @@ static void keyboard_callback(registers_t *regs) {
         memory_copy(key_buffer_previous, key_buffer, 256);
         key_buffer[0] = '\0';
     } else {
-        if (compare_string(sc_name[(int) scancode], "LShift") == 0 || compare_string(sc_name[(int) scancode], "RShift")  == 0) {
-            shift = true;
-            return;
-        } else if (compare_string(sc_name[(int) scancode], "Lctrl") == 0) {
-            ctrl = true;
-            return;
-        }
 
         char letter;
 
-        if (c_shift == true) {
+        if (shift == true) {
             letter = sc_ascii_upper[(int) scancode];
         } else {
             letter = sc_ascii_lower[(int) scancode];
@@ -346,8 +332,6 @@ static void keyboard_callback(registers_t *regs) {
         char str[2] = {letter, '\0'};
         print_string(str);
     }
-
-    prev_code = scancode;
 }
 
 void init_keyboard() {

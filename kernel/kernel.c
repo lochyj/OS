@@ -14,8 +14,8 @@ void kinit() {
     load_idt();
     isr_install();
 
-    print_string("Enabling CMOS read for RDT on port 0x70 and 0x71.\n");
-    init_time();
+    // print_string("Enabling CMOS read for RDT on port 0x70 and 0x71.\n");
+    // init_time();
 
     // print_string("Installing keyboard registry.\n");
     // init_keyboard_register(keyboard_registry);
@@ -30,15 +30,15 @@ void kinit() {
     print_string_color("This is blue!\n", create_vga_color(BLUE_TEXT, BLACK_BACKGROUND));
     print_string_color("This has a red background!\n", create_vga_color(WHITE_TEXT, RED_BACKGROUND));
 
-    // u8 colour_thing = 0x00;
-    // for (int i = 0; i <= 256; i++) {
-    //     video_color = colour_thing;
-    //     printf("%c", (int)(258));
-    //     colour_thing += 0x01;
-    // }
-    // print_nl();
+    u8 colour_thing = 0x00;
+    for (int i = 0; i <= 256; i++) {
+        video_color = colour_thing;
+        printf("%c", CHAR_CENTERED_SQUARE);
+        colour_thing += 0x01;
+    }
+    print_nl();
 
-    // video_color = DEFAULT_COLOR;
+    video_color = DEFAULT_COLOR;
 }
 
 void kmain() {
@@ -46,15 +46,9 @@ void kmain() {
     kinit();
     // printf("Hello %s!\n", __func__);
 
-    video_color = create_vga_color(WHITE_TEXT, LIGHT_GREY_BACKGROUND);
-    printf("%c ", CHAR_1);
-    printf("%c ", CHAR_2);
-    printf("%c ", CHAR_3);
-    printf("%c ", CHAR_4);
-    printf("%c\n", CHAR_5);
-    video_color = DEFAULT_COLOR;
-
-
+    // read_rtc();
+    // printf("The current time is %d:%d:%d %d/%d/%d\n", hour, minute, second, day, month, year);
+    
     print_string("Initializing keyboard (IRQ 1).\n> ");
     init_keyboard();
 

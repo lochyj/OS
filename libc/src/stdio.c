@@ -114,6 +114,7 @@ void printf(const char* format, ...) {
 
                     case 'X':
                     case 'x':
+                                print_hex(*argp);
                     case 'p':   radix = 16; sign = false;
                                 argp = printf_number(argp, length, sign, radix);
                                 break;
