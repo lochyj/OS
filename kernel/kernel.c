@@ -30,21 +30,29 @@ void kinit() {
     print_string_color("This is blue!\n", create_vga_color(BLUE_TEXT, BLACK_BACKGROUND));
     print_string_color("This has a red background!\n", create_vga_color(WHITE_TEXT, RED_BACKGROUND));
 
-    u8 colour_thing = 0x00;
-    for (int i = 0; i <= 256; i++) {
-        video_color = colour_thing;
-        printf("%c", (int)(258));
-        colour_thing += 0x01;
-    }
-    print_nl();
+    // u8 colour_thing = 0x00;
+    // for (int i = 0; i <= 256; i++) {
+    //     video_color = colour_thing;
+    //     printf("%c", (int)(258));
+    //     colour_thing += 0x01;
+    // }
+    // print_nl();
 
-    video_color = DEFAULT_COLOR;
+    // video_color = DEFAULT_COLOR;
 }
 
 void kmain() {
 
     kinit();
-    printf("Hello %s!\n", __func__);
+    // printf("Hello %s!\n", __func__);
+
+    video_color = create_vga_color(WHITE_TEXT, LIGHT_GREY_BACKGROUND);
+    printf("%c ", CHAR_1);
+    printf("%c ", CHAR_2);
+    printf("%c ", CHAR_3);
+    printf("%c ", CHAR_4);
+    printf("%c\n", CHAR_5);
+    video_color = DEFAULT_COLOR;
 
 
     print_string("Initializing keyboard (IRQ 1).\n> ");
