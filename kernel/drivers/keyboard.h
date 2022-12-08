@@ -239,19 +239,19 @@ char *sc_name[] = {
                    };
 
 char sc_ascii_upper[] = {
-                         '?', '~', '!', '@', '#', '$', '%', '^',
-                         '&', '*', '(', ')', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
-                         'U', 'I', 'O', 'P', '{', '}', '?', '?', 'A', 'S', 'D', 'F', 'G',
-                         'H', 'J', 'K', 'L', ':', '"', '`', '?', '|', 'Z', 'X', 'C', 'V',
-                         'B', 'N', 'M', '<', '>', '?', '?', '?', '?', ' '
+                         0x00, '~', '!', '@', '#', '$', '%', '^',
+                         '&', '*', '(', ')', '-', '=', 0x00, 0x00, 'Q', 'W', 'E', 'R', 'T', 'Y',
+                         'U', 'I', 'O', 'P', '{', '}', 0x00, 0x00, 'A', 'S', 'D', 'F', 'G',
+                         'H', 'J', 'K', 'L', ':', '"', '`', 0x00, '|', 'Z', 'X', 'C', 'V',
+                         'B', 'N', 'M', '<', '>', '?', 0x00, 0x00, 0x00, ' '
                          };
 
 char sc_ascii_lower[] = {
-                         '?', '~', '1', '2', '3', '4', '5', '6',
-                         '7', '8', '9', '0', '-', '=', '?', '?', 'q', 'w', 'e', 'r', 't', 'y',
-                         'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
-                         'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
-                         'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '
+                         0x00, '~', '1', '2', '3', '4', '5', '6',
+                         '7', '8', '9', '0', '-', '=', 0x00, 0x00, 'q', 'w', 'e', 'r', 't', 'y',
+                         'u', 'i', 'o', 'p', '[', ']', 0x00, 0x00, 'a', 's', 'd', 'f', 'g',
+                         'h', 'j', 'k', 'l', ';', '\'', '`', 0x00, '\\', 'z', 'x', 'c', 'v',
+                         'b', 'n', 'm', ',', '.', '/', 0x00, 0x00, 0x00, ' '
                          };
 
 void scancode_to_ascii(u8 scancode) {
@@ -280,19 +280,19 @@ static void keyboard_callback(registers_t *regs) {
     // print_string(" ");
 
 
-    // if (scancode == LSHIFT || scancode == RSHIFT) {
-    //     shift = true;
-    // } else if (scancode == LSHIFT + 0x80 || scancode == RSHIFT + 0x80) {
-    //     shift = false;
-    // } else if (scancode == LCTRL || scancode == RCTRL) {
-    //     ctrl = true;
-    // } else if (scancode == LCTRL + 0x80 || scancode == RCTRL + 0x80) {
-    //     ctrl = false;
-    // } else if (scancode == LALT || scancode == RALT) {
-    //     alt = true;
-    // } else if (scancode == LALT + 0x80 || scancode == RALT + 0x80) {
-    //     alt = false;
-    // }
+    if (scancode == LEFT_SHIFT || scancode == RIGHT_SHIFT) {
+        shift = true;
+    } else if (scancode == LEFT_SHIFT + 0x80 || scancode == RIGHT_SHIFT + 0x80) {
+        shift = false;
+    } else if (scancode == LEFT_CONTROL) {
+        ctrl = true;
+    } else if (scancode == LEFT_CONTROL + 0x80) {
+        ctrl = false;
+    } else if (scancode == LEFT_ALT) {
+        alt = true;
+    } else if (scancode == LEFT_ALT + 0x80) {
+        alt = false;
+    }
     
     if (scancode < SC_MAX) {
         keyboard_registry.keys[scancode].pressed = true;
