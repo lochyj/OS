@@ -313,7 +313,7 @@ static void keyboard_callback(registers_t *regs) {
         if (backspace(key_buffer)) {
             print_backspace();
         }
-    } else if (scancode ==ENTER) {
+    } else if (scancode == ENTER) {
         print_nl();
         execute_shell_input(key_buffer);
         memory_copy(key_buffer_previous, key_buffer, 256);
