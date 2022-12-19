@@ -26,11 +26,10 @@ void kinit() {
 
 }
 
+/**
+ * @brief This function is called after the kernel has finished initializing and is used for testing purposes.
+ */
 void kpostinit() {
-    /**
-     * @brief This function is called after the kernel has finished initializing and is used for testing purposes.
-     */
-
     // ...
 
     // Init the shell after the kernel has finished initializing and testing has finished

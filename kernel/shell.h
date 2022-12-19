@@ -144,7 +144,7 @@ void execute_shell_input(char* input) {
 // }
 
 // // --- This is called by the keyboard driver ---
-// // TODO: add a check for the keyboard driver that checks if the kernel wants to call shell commands
+//
 // void execute_shell_input(char* input) {
 //     bool hit = false;
 
@@ -153,7 +153,7 @@ void execute_shell_input(char* input) {
 //     print_nl();
 
 //     int argc = 0;
-//     // NOTE: -possible sources of errors- * Is a source of errors // TODO: fix the errors lol
+//     // NOTE: -possible sources of errors- * Is a source of errors
 //     char** argvt = alloc(1000);
 
 //     int j = 0;

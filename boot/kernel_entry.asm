@@ -3,6 +3,5 @@ global _start
 
 _start:
     [extern kmain]
-    ;   int 0x13 ; TODO <--
     call kmain
     jmp $

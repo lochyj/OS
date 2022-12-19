@@ -29,7 +29,7 @@ jmp $
 ; Loading the kernel
 load_kernel:
     mov bx, KERNEL_OFFSET   ; bx --> offset of the kernel
-    mov dh, 31              ; dh --> number of sectors to read ; This was the source of many many hours of suffering ; TODO: Make this dynamic
+    mov dh, 31              ; dh --> number of sectors to read ; This was the source of many many hours of suffering
     mov dl, [BOOT_DRIVE]    ; dl --> boot drive
     call disk_load          ; call disk_load to load the kernel
     ret
