@@ -14,7 +14,7 @@ typedef signed long long i64;
 
 typedef u16 wchar;
 
-typedef u64 size_t;     // TODO: remove the _t from the code because it is verbose and useless.
+typedef u64 size_t;     // TODO: remove the _t from the code because it is verbose and mostly useless.
 
 typedef u8 bool;
 

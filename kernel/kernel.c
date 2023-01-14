@@ -7,33 +7,30 @@
 
 #include <stdio.h>
 
-void kinit() {
+void (*Function) (...);
 
+
+
+void kinit() {
+    // We clear the screen buffer before we do anything else
     clear_screen();
-    print_string("Installing interrupt service routines (ISRs).\n");
+
     load_idt();
     isr_install();
 
-    print_string("Enabling external interrupts.\n");
+    // Enabling external interrupts
     asm volatile("sti");
 
-    print_string("Initializing dynamic memory.\n");
+    // Initializing dynamic memory
     init_dynamic_mem();
-
-    print_string_color("This is green!\n", create_vga_color(GREEN_TEXT, BLACK_BACKGROUND));
-    print_string_color("This is blue!\n", create_vga_color(BLUE_TEXT, BLACK_BACKGROUND));
-    print_string_color("This has a red background!\n", create_vga_color(WHITE_TEXT, RED_BACKGROUND));
-
 }
 
 /**
  * @brief This function is called after the kernel has finished initializing and is used for testing purposes.
  */
 void kpostinit() {
-    // ...
-
     // Init the shell after the kernel has finished initializing and testing has finished
-    print_string("Initializing keyboard (IRQ 1).\n> ");
+    print_string("> ");
     init_keyboard();
 }
 
