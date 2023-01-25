@@ -7,7 +7,7 @@
 #define SHELL_H
 
 void execute_shell_input(char* input) {
-    int hit = false;
+    int found = false;
 
     input = to_upper_string(input);
 
@@ -16,21 +16,21 @@ void execute_shell_input(char* input) {
         asm volatile("hlt");
     } else if (compare_string(input, "CLS") == 0) {
         clear_screen();
-        hit = true;
+        found = true;
     } else if (compare_string(input, "HELP") == 0) {
         print_string("Available commands: EXIT, CLS, HELP\n");
-        hit = true;
+        found = true;
     } else if (compare_string(input, "TIME") == 0) {
         print_time(get_kernel_time());
-        hit = true;
+        found = true;
     }
 
     // If the command was not recognized, print an error message.
-    if (hit == false) {
+    if (found == false) {
         print_string("Unknown command '"); print_string(input); print_string("' Type HELP for a list of available commands.\n");
     }
 
-    hit = false;
+    found = false;
     print_string("> ");
 }
 
