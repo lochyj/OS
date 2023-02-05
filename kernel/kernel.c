@@ -22,19 +22,6 @@ void kinit() {
     init_dynamic_mem();
 }
 
-/**
- * @brief This function is called after the kernel has finished initializing and is used for testing purposes.
- */
-void kpostinit() {
-    // Init the shell after the kernel has finished initializing and testing has finished
-    print_string("> ");
-    init_keyboard();
-}
-
 void kmain() {
-
-    kinit();
-
-    kpostinit();
 
 }
