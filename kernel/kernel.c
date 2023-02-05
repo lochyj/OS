@@ -3,10 +3,11 @@
 #include "kernel/utilities/memory.h"
 #include "kernel/utilities/time.h"
 #include "kernel/utilities/vga_color.h"
+#include "kernel/console.h"
 
 #include <stdio.h>
 
-void (*Function) (...);
+// void (*Function) (...);
 
 void kinit() {
     // We clear the screen buffer before we do anything else
@@ -23,5 +24,5 @@ void kinit() {
 }
 
 void kmain() {
-
+    writeLine(2, "Welcome to the kernel!");
 }

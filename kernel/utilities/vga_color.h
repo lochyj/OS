@@ -5,7 +5,7 @@
 
 #define VGA_COLOR_H
 
-#define DEFAULT_COLOR 0x0f  // White text on black background
+#define DEFAULT_COLOR 0x0F  // White text on black background
 
 typedef u8 vga_color;
 
