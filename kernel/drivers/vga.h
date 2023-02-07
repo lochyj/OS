@@ -1,5 +1,4 @@
 #include "kernel/drivers/ports.h"
-#include "kernel/utilities/vga_color.h"
 #include "kernel/inc/util.h"
 
 #include <stdint.h>
@@ -34,7 +33,7 @@ int get_cursor() {
 #define MAX_ROWS 25             //* 25 x Characters
 #define MAX_COLS 80             //* 80 x Characters
 
-u8 video_color = DEFAULT_COLOR;  // 0x0f is WHITE on BLACK
+u8 video_color = 0x0f;  // 0x0f is WHITE on BLACK
 
 void set_char_at_video_memory(char character, int offset) {
     unsigned char *videoMemory = (unsigned char *) VIDEO_ADDRESS;
@@ -101,12 +100,6 @@ void print_char(char chr) {
     }
 
     set_cursor(offset);
-}
-
-void print_string_color(char *string, vga_color color) {
-    video_color = color;
-    print_string(string);
-    video_color = DEFAULT_COLOR;
 }
 
 void print_int(int num) {

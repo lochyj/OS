@@ -2,12 +2,13 @@
 #include "kernel/drivers/keyboard.h"
 #include "kernel/utilities/memory.h"
 #include "kernel/utilities/time.h"
-#include "kernel/utilities/vga_color.h"
 #include "kernel/console.h"
 
 #include <stdio.h>
 
-// void (*Function) (...);
+#define Function (...) void *FullFunction(0, POP_LAST(__VA_ARGS__))
+
+//void (*Function) (...);
 
 void kinit() {
     // We clear the screen buffer before we do anything else
@@ -24,5 +25,13 @@ void kinit() {
 }
 
 void kmain() {
-    writeLine(2, "Welcome to the kernel!");
+
+    kinit();
+
+    init_keyboard();
+
+    // clear_screen();
+
+    // writeLine(2, "Welcome to the kernel!");
+
 }

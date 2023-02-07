@@ -1,17 +1,11 @@
 #include <stdint.h>
 
-#ifndef UTIL_H
+#ifndef UTILITY_H
 
-#define UTIL_H
+#define UTILITY_H
 
 #define low_16(address) (u16)((address) & 0xFFFF)
 #define high_16(address) (u16)(((address) >> 16) & 0xFFFF)
-
-int string_length(char s[]) {
-    int i = 0;
-    while (s[i] != '\0') ++i;
-    return i;
-}
 
 int int_length(int n) {
     int i = 0;
@@ -19,6 +13,12 @@ int int_length(int n) {
         n /= 10;
         ++i;
     }
+    return i;
+}
+
+int string_length(char s[]) {
+    int i = 0;
+    while (s[i] != '\0') ++i;
     return i;
 }
 
