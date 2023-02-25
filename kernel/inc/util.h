@@ -157,4 +157,8 @@ int compare_string(char s1[], char s2[]) {
     return s1[i] - s2[i];
 }
 
+int compare_char(char c1, char c2) {
+    return c1 - c2;
+}
+
 #endif
