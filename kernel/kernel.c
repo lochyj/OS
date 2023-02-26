@@ -2,7 +2,6 @@
 #include "kernel/drivers/keyboard.h"
 #include "kernel/utilities/memory.h"
 #include "kernel/utilities/time.h"
-#include "kernel/console.h"
 
 #include <stdio.h>
 
@@ -17,7 +16,7 @@ void kinit() {
     asm volatile("sti");
 
     // Initializing dynamic memory
-    init_dynamic_mem();
+    //init_dynamic_mem();
 }
 
 void kmain() {

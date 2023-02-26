@@ -1,4 +1,4 @@
-#include "kernel/shell.h"
+//#include "kernel/shell.h"
 #include "kernel/cpu/cpu.h"
 #include "kernel/inc/util.h"
 #include "kernel/drivers/vga.h"
@@ -315,7 +315,7 @@ static void keyboard_callback(registers_t *regs) {
         }
     } else if (scancode == ENTER) {
         print_nl();
-        execute_shell_input(key_buffer);
+        //execute_shell_input(key_buffer);
         memory_copy(key_buffer_previous, key_buffer, 256);
         key_buffer[0] = '\0';
     } else {

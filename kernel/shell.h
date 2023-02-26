@@ -9,12 +9,14 @@
 
 //#define Function (...) void *FullFunction(0, POP_LAST(__VA_ARGS__))
 
-typedef void (*Function) (char* input);
+typedef void (*Function) (char*);
 
 typedef struct {
     char* name;
-    Function functionCall;
+    Function* functionCall;
 } Command;
+
+// Function should be added as {&name, &function};
 
 Command commandList[10];
 int commandListLength = 0;
