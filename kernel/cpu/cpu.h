@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include "kernel/inc/util.h"
 
-#include "kernel/drivers/vga.h"
-#include "kernel/drivers/ports.h"
+#include "include/display.h"
+#include "include/ports.h"
 
 #ifndef CPU_H
 

@@ -1,12 +1,12 @@
-#include "kernel/drivers/vga.h"
-#include "kernel/drivers/keyboard.h"
+#include "include/display.h"
+#include "include/keyboard.h"
 #include "kernel/utilities/memory.h"
 #include "kernel/utilities/time.h"
-#include "kernel/utilities/vga_color.h"
 
 #include <stdio.h>
 
-void (*Function) (...);
+const char* KERNEL_VERSION = "v1.0.0";
+const char* USER = "Lochyj";
 
 void kinit() {
     // We clear the screen buffer before we do anything else
@@ -18,23 +18,38 @@ void kinit() {
     // Enabling external interrupts
     asm volatile("sti");
 
+    // Dynamic MEM is currently not working...
     // Initializing dynamic memory
-    init_dynamic_mem();
+    //init_dynamic_mem();
 }
 
-/**
- * @brief This function is called after the kernel has finished initializing and is used for testing purposes.
- */
-void kpostinit() {
-    // Init the shell after the kernel has finished initializing and testing has finished
-    print_string("> ");
-    init_keyboard();
+void login() {
+    // Kernel LOGO
+    printf(" ____  _ _       _     ____   _____\n");
+    printf("|  _ \\| (_)     | |   / __ \\ / ____|\n");
+    printf("| |_) | |_ _ __ | | _| |  | | (___\n");
+    printf("|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n");
+    printf("| |_) | | | | | |   <| |__| |____) |\n");
+    printf("|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n");
+    printf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
 }
 
 void kmain() {
 
     kinit();
 
-    kpostinit();
+    login();
+
+    init_keyboard();
+    print_time(get_kernel_time());
+    print_nl();
+
+    printf("terminal@%s> ", USER);
+
+    char* in = kinput();
+
+    print_string("welp...\n");
+    print_string(in);
+    print_string("\nwelp...\n");
 
 }

@@ -3,5 +3,6 @@
 #define STD_LIB_H
 
 #include "stdint.h"
+#include "stdio.h"
 
 #endif

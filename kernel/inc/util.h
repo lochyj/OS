@@ -1,17 +1,11 @@
 #include <stdint.h>
 
-#ifndef UTIL_H
+#ifndef UTILITY_H
 
-#define UTIL_H
+#define UTILITY_H
 
 #define low_16(address) (u16)((address) & 0xFFFF)
 #define high_16(address) (u16)(((address) >> 16) & 0xFFFF)
-
-int string_length(char s[]) {
-    int i = 0;
-    while (s[i] != '\0') ++i;
-    return i;
-}
 
 int int_length(int n) {
     int i = 0;
@@ -19,6 +13,12 @@ int int_length(int n) {
         n /= 10;
         ++i;
     }
+    return i;
+}
+
+int string_length(char s[]) {
+    int i = 0;
+    while (s[i] != '\0') ++i;
     return i;
 }
 
@@ -155,6 +155,45 @@ int compare_string(char s1[], char s2[]) {
         if (s1[i] == '\0') return 0;
     }
     return s1[i] - s2[i];
+}
+
+int compare_char(char c1, char c2) {
+    return c1 - c2;
+}
+
+// Copied from nanoByte
+
+void* memcpy(void* dst, const void* src, u16 num)
+{
+    u8* u8Dst = (u8*)dst;
+    const u8* u8Src = (const u8*)src;
+
+    for (u16 i = 0; i < num; i++)
+        u8Dst[i] = u8Src[i];
+
+    return dst;
+}
+
+void* memset(void* ptr, int value, u16 num)
+{
+    u8* u8Ptr = (u8*)ptr;
+
+    for (u16 i = 0; i < num; i++)
+        u8Ptr[i] = (u8)value;
+
+    return ptr;
+}
+
+int memcmp(const void* ptr1, const void* ptr2, u16 num)
+{
+    const u8 * u8Ptr1 = (const u8*)ptr1;
+    const u8 * u8Ptr2 = (const u8*)ptr2;
+
+    for (u16 i = 0; i < num; i++)
+        if (u8Ptr1[i] != u8Ptr2[i])
+            return 1;
+
+    return 0;
 }
 
 #endif

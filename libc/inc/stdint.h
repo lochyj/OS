@@ -14,11 +14,11 @@ typedef signed long long i64;
 
 typedef u16 wchar;
 
-typedef u64 size_t;     // TODO: remove the _t from the code because it is verbose and mostly useless.
+typedef u64 size_t;
 
 typedef u8 bool;
 
-struct div_t        { int quot, rem; }
+struct div_t        { int quot, rem; };     // REMEMBER TO ADD ; TO THE END OF STRUCTS
 
 #define false       0
 #define true        1
