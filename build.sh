@@ -5,8 +5,6 @@ echo "---- Removing old files ----"
 rm -rf ./out/*
 rm -rf ./out/image/*
 
-rm -rf kernel.elf
-
 mkdir ./out/image
 
 echo "---- Building ASM ----"
@@ -18,7 +16,6 @@ nasm ./boot/kernel_entry.asm -f elf32 -o ./out/kernel-entry.out
 nasm ./boot/mbr.asm -f bin -o ./out/mbr.bin
 
 nasm ./kernel/cpu/interrupt.asm -f elf32 -o ./out/kasm.out
-# ./kernel/drivers/disk.asm
 
 echo "---- Compiling C ----"
 

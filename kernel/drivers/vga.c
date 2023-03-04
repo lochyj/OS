@@ -1,17 +1,7 @@
-#include "kernel/drivers/ports.h"
+#include "include/ports.h"
 #include "kernel/inc/util.h"
 
 #include <stdint.h>
-
-
-#ifndef VGA_H
-
-#define VGA_H
-
-#define VGA_CTRL_REGISTER 0x3d4
-#define VGA_DATA_REGISTER 0x3d5
-#define VGA_OFFSET_LOW 15
-#define VGA_OFFSET_HIGH 14
 
 void set_cursor(int offset) {
     offset /= 2;
@@ -28,12 +18,6 @@ int get_cursor() {
     offset += port_byte_in(VGA_DATA_REGISTER);
     return offset * 2;
 }
-
-#define VIDEO_ADDRESS 0xb8000
-#define MAX_ROWS 25             //* 25 x Characters
-#define MAX_COLS 80             //* 80 x Characters
-
-u8 video_color = 0x0f;  // 0x0f is WHITE on BLACK
 
 void set_char_at_video_memory(char character, int offset) {
     unsigned char *videoMemory = (unsigned char *) VIDEO_ADDRESS;
@@ -135,5 +119,3 @@ void print_hex(u8 num) {
     buffer = hex_to_int(num);
     print_int(buffer);
 }
-
-#endif

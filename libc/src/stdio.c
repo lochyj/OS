@@ -4,10 +4,9 @@
 //* The non-modified parts of the code is licensed under the Unlicense, which is a public domain license.                        |
 //* The modified parts of the code is licensed under the MIT licence and / or in accordance to the root licence of the project.  |
 //* ------------------------------------------------------------------------------------------------------------------------------
-#include <stdio.h>
-#include <stdint.h>
+#include <stdlib.h>
 
-#include <kernel/drivers/vga.h>
+#include <include/display.h>
 #include <kernel/inc/util.h>
 
 void putc(char c) {

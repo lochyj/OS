@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "kernel/drivers/vga.h"
+#include "include/display.h"
 #include "kernel/inc/util.h"
 
 #ifndef MEMORY_H

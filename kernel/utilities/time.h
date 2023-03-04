@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
-#include "kernel/drivers/ports.h"
+#include "include/ports.h"
 #include "kernel/inc/util.h"
 
 #ifndef TIME_H
