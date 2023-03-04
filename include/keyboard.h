@@ -12,6 +12,9 @@
 static char key_buffer_previous[256];
 static char key_buffer[256];
 
+bool waiting_for_input = false;
+bool input_returned = false;
+
 bool shift = false;
 bool ctrl = false;
 bool alt = false;
@@ -75,5 +78,7 @@ void replace_buffer(char buffer[256], char replacement[256]);
 static void keyboard_callback(registers_t *regs);
 
 void init_keyboard();
+
+char* kinput();
 
 #include "kernel/drivers/keyboard.c"

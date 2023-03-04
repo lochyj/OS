@@ -81,6 +81,9 @@ static void keyboard_callback(registers_t *regs) {
         print_nl();
         memory_copy(key_buffer_previous, key_buffer, 256);
         key_buffer[0] = '\0';
+        if (waiting_for_input) {
+            input_returned = true;
+        }
     } else {
 
         char letter;
@@ -99,4 +102,18 @@ static void keyboard_callback(registers_t *regs) {
 
 void init_keyboard() {
     register_interrupt_handler(IRQ1, keyboard_callback);
+}
+
+char* kinput() {
+    waiting_for_input = true;
+    while (!input_returned) {
+        {};
+    }
+
+    if (!input_returned) return "Error: Input not returned";
+
+    input_returned = false;
+    waiting_for_input = false;
+    char* out = &key_buffer[0];
+    return out;
 }
