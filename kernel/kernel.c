@@ -41,15 +41,10 @@ void kmain() {
     login();
 
     init_keyboard();
-    print_time(get_kernel_time());
-    print_nl();
 
     printf("terminal@%s> ", USER);
 
     char* in = kinput();
-
-    print_string("welp...\n");
     print_string(in);
-    print_string("\nwelp...\n");
 
 }

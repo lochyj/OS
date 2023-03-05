@@ -45,12 +45,24 @@ void int_to_string(int n, char str[]) {
     reverse(str);
 }
 
-void memory_copy(char *source, char *dest, int nbytes) {
-    int i;
-    for (i = 0; i < nbytes; i++) {
-        *(dest + i) = *(source + i);
-    }
+// void memory_copy(char *source, char *dest, int nbytes) {
+//     int i;
+//     for (i = 0; i < nbytes; i++) {
+//         *(dest + i) = *(source + i);
+//     }
+// }
+
+void* memory_copy(void* dst, const void* src, u16 num)
+{
+    u8* u8Dst = (u8*)dst;
+    const u8* u8Src = (const u8*)src;
+
+    for (u16 i = 0; i < num; i++)
+        u8Dst[i] = u8Src[i];
+
+    return dst;
 }
+
 
 void append(char s[], char n) {
     int len = string_length(s);

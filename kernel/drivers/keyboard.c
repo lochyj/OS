@@ -3,6 +3,7 @@
 #include "include/display.h"
 
 #include <stdint.h>
+#include <stdio.h>
 
 bool init_keyboard_register(keyboard_register reg) {
     u8 keyid = 0x00;
@@ -110,10 +111,10 @@ char* kinput() {
         {};
     }
 
-    if (!input_returned) return "Error: Input not returned";
+    if (!input_returned) return "Error: Input not returned\0";
 
     input_returned = false;
     waiting_for_input = false;
-    char* out = &key_buffer[0];
+    char* out = &key_buffer_previous[0];
     return out;
 }
