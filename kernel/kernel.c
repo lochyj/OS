@@ -24,6 +24,15 @@ void kinit() {
 }
 
 void login() {
+    printf("login@%s> ", USER);
+    char* pass = kinput();
+    if (compare_string(pass, "123") == 0) {
+        clear_screen();
+    } else {
+        printf("Login failed!\n");
+        clear_screen();
+        login();
+    }
     // Kernel LOGO
     printf(" ____  _ _       _     ____   _____\n");
     printf("|  _ \\| (_)     | |   / __ \\ / ____|\n");
@@ -38,13 +47,12 @@ void kmain() {
 
     kinit();
 
-    login();
-
     init_keyboard();
+
+    login();
 
     printf("terminal@%s> ", USER);
 
-    char* in = kinput();
-    print_string(in);
+    // init_console();
 
 }
