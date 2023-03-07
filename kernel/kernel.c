@@ -18,21 +18,11 @@ void kinit() {
     // Enabling external interrupts
     asm volatile("sti");
 
-    // Dynamic MEM is currently not working...
     // Initializing dynamic memory
     //init_dynamic_mem();
 }
 
 void login() {
-    printf("login@%s> ", USER);
-    char* pass = kinput();
-    if (compare_string(pass, "123") == 0) {
-        clear_screen();
-    } else {
-        printf("Login failed!\n");
-        clear_screen();
-        login();
-    }
     // Kernel LOGO
     printf(" ____  _ _       _     ____   _____\n");
     printf("|  _ \\| (_)     | |   / __ \\ / ____|\n");
@@ -40,10 +30,10 @@ void login() {
     printf("|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n");
     printf("| |_) | | | | | |   <| |__| |____) |\n");
     printf("|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n");
-    printf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
+    printf("Kernel version: %s; User: %s;\n%dkb Memory;\n", KERNEL_VERSION, USER);
 }
 
-void kmain() {
+void _kernel_main() {
 
     kinit();
 
@@ -52,6 +42,10 @@ void kmain() {
     login();
 
     printf("terminal@%s> ", USER);
+
+    // int a = alloc(sizeof(char));
+    // a = 'e';
+    // printf("%c", a);
 
     // init_console();
 

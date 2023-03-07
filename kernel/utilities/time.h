@@ -61,7 +61,7 @@ Time get_kernel_time() {
     port_byte_out(cmos_address, 0x08);
     u8 month = port_byte_in(cmos_data);
 
-    // if month is betweeen october and april, its daylight savings time
+    // if month is between october and april, its daylight savings time
     if (month < 10 || month >= 4) {
         hour -= 0x01;
     }
