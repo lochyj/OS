@@ -30,7 +30,7 @@ void login() {
     printf("|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n");
     printf("| |_) | | | | | |   <| |__| |____) |\n");
     printf("|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n");
-    printf("Kernel version: %s; User: %s;\n%dkb Memory;\n", KERNEL_VERSION, USER);
+    printf("Kernel version: %s; User: %s;\n", KERNEL_VERSION, USER);
 }
 
 void _kernel_main() {

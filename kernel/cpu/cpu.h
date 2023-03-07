@@ -145,7 +145,6 @@ void set_idt_gate(int n, u32 handler) {
 // ISR          <- Interrupt Service Routines
 // ------------------------------------------
 
-// NOTE: Copilot just made this and it came directly from https://github.com/FRosner/FrOS/ stuff you copilot.
 char* exception_messages[] = {
     "Division by zero",
     "Debug",
