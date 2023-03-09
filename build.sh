@@ -22,7 +22,7 @@ gcc -m32 -g -O2 -fno-pie -ffreestanding -fno-stack-protector -I . -I ./libc/inc 
 
 echo "---- Linking output files ----"
 
-ld -m elf_i386 -T ./linker.ld -o ./out/kernel.bin -shared -fstack-protector -nostdlib ./out/boot.out ./out/kasm.out ./out/kernel.out
+ld -m elf_i386 -T ./linker.ld -o ./out/kernel.bin ./out/boot.out ./out/kasm.out ./out/kernel.out -nostdlib
 # -e main -Ttext 0x9000
 
 echo "-------- x86 check --------"
@@ -45,18 +45,6 @@ grub-mkrescue -o ./out/image/BlinkOS.iso isodir
 
 echo "---- Running in QEMU ----"
 
-#qemu-system-i386 -kernel ./out/kernel.bin -monitor stdio
+qemu-system-i386 -kernel ./out/kernel.bin -monitor stdio
 
-qemu-system-i386 -cdrom ./out/image/BlinkOS.iso -monitor stdio
-
-# ------------------------------
-
-# Compiling the asm code
-
-#nasm ./boot/kernel_entry.asm -f elf32 -o ./out/kernel-entry.out
-
-#nasm ./boot/mbr.asm -f bin -o ./out/mbr.bin
-
-#echo "---- Adding MBR bin to kernel bin ----" 
-
-#cat ./out/mbr.bin ./out/kernel.bin > ./out/image/image.img
+#qemu-system-i386 -cdrom ./out/image/BlinkOS.iso -monitor stdio
