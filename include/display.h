@@ -11,13 +11,13 @@ void set_cursor(int offset);
 
 int get_cursor();
 
-#define VIDEO_ADDRESS 0xb8000
+#define VIDEO_ADDRESS 0xB8000
 #define MAX_ROWS 25             //* 25 x Characters
 #define MAX_COLS 80             //* 80 x Characters
 
 // 0x0f is WHITE text on a BLACK background
 // Current display color
-u8 video_color = 0x0f;
+char video_color = 0x0F;
 
 void set_char_at_video_memory(char character, int offset);
 
@@ -30,7 +30,7 @@ int scroll_ln(int offset);
 
 void print_string(char *string);
 
-void print_char(char chr);
+void putc(char chr);
 
 void print_int(int num);
 

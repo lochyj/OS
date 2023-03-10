@@ -4,20 +4,30 @@
 #include <stdint.h>
 
 void set_cursor(int offset) {
-    offset /= 2;
-    port_byte_out(VGA_CTRL_REGISTER, VGA_OFFSET_HIGH);
-    port_byte_out(VGA_DATA_REGISTER, (unsigned char) (offset >> 8));
-    port_byte_out(VGA_CTRL_REGISTER, VGA_OFFSET_LOW);
-    port_byte_out(VGA_DATA_REGISTER, (unsigned char) (offset & 0xff));
+    offset;
+	port_byte_out(0x3D4, 0x0F);
+	port_byte_out(0x3D5, (u8) (offset & 0xFF));
+	port_byte_out(0x3D4, 0x0E);
+	port_byte_out(0x3D5, (u8) ((offset >> 8) & 0xFF));
 }
 
 int get_cursor() {
-    port_byte_out(VGA_CTRL_REGISTER, VGA_OFFSET_HIGH);
-    int offset = port_byte_in(VGA_DATA_REGISTER) << 8;
-    port_byte_out(VGA_CTRL_REGISTER, VGA_OFFSET_LOW);
-    offset += port_byte_in(VGA_DATA_REGISTER);
-    return offset * 2;
+    u16 pos = 0;
+    port_byte_out(0x3D4, 0x0F);
+    pos |= port_byte_in(0x3D5);
+    port_byte_out(0x3D4, 0x0E);
+    pos |= ((u16)port_byte_in(0x3D5)) << 8;
+    return pos;
 }
+
+// void enable_cursor(u8 cursor_start, u8 cursor_end)
+// {
+// 	port_byte_out(0x3D4, 0x0A);
+// 	port_byte_out(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
+ 
+// 	port_byte_out(0x3D4, 0x0B);
+// 	port_byte_out(0x3D5, (inb(0x3D5) & 0xE0) | cursor_end);
+// }
 
 void set_char_at_video_memory(char character, int offset) {
     unsigned char *videoMemory = (unsigned char *) VIDEO_ADDRESS;
@@ -26,11 +36,11 @@ void set_char_at_video_memory(char character, int offset) {
 }
 
 int get_row_from_offset(int offset) {
-    return offset / (2 * MAX_COLS);
+    return (offset * 2) / (2 * MAX_COLS);
 }
 
 int get_offset(int col, int row) {
-    return 2 * (row * MAX_COLS + col);
+    return (row * MAX_COLS + col);
 }
 
 int move_offset_to_new_line(int offset) {
@@ -69,7 +79,7 @@ void print_string(char *string) {
     set_cursor(offset);
 }
 
-void print_char(char chr) {
+void putc(char chr) {
     int offset = get_cursor();
 
     if (offset >= MAX_ROWS * MAX_COLS * 2) {

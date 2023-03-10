@@ -45,6 +45,6 @@ grub-mkrescue -o ./out/image/BlinkOS.iso isodir
 
 echo "---- Running in QEMU ----"
 
-qemu-system-i386 -kernel ./out/kernel.bin -monitor stdio
+#qemu-system-i386 -kernel ./out/kernel.bin -monitor stdio
 
-#qemu-system-i386 -cdrom ./out/image/BlinkOS.iso -monitor stdio
+qemu-system-i386 -cdrom ./out/image/BlinkOS.iso -monitor stdio

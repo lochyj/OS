@@ -9,10 +9,6 @@
 #include <include/display.h>
 #include <kernel/inc/util.h>
 
-void putc(char c) {
-    print_char(c);
-}
-
 void puts(const char* str) {
     while(*str) {
         putc(*str);
@@ -203,107 +199,4 @@ int* printf_number(int* argp, int length, bool sign, int radix) {
     puts(buffer);
 
     return argp;
-}
-
-void println(const char* format, ...) {
-    int* argp = (int*) &format;
-    int state = PRINTF_STATE_NORMAL;
-    int length = PRINTF_LENGTH_DEFAULT;
-    int radix = 10;
-    bool sign = false;
-
-    argp++;
-
-    while (*format) {
-        switch (state) {
-            case PRINTF_STATE_NORMAL:
-                switch (*format) {
-                    case '%':   state = PRINTF_STATE_LENGTH; break;
-                    default:    putc(*format); break;
-                }
-                break;
-
-            case PRINTF_STATE_LENGTH:
-                switch (*format) {
-                    case 'h':   length = PRINTF_LENGTH_SHORT;
-                                state = PRINTF_STATE_LENGTH_SHORT; break;
-
-                    case 'l':   length = PRINTF_LENGTH_LONG;
-                                state = PRINTF_STATE_LENGTH_LONG; break;
-
-                    default:    goto PRINTF_STATE_SPEC_;
-                }
-                break;
-
-            case PRINTF_STATE_LENGTH_SHORT:
-                if (*format == 'h') {
-                    length = PRINTF_LENGTH_SHORT_SHORT;
-                    state = PRINTF_STATE_SPEC;
-                }
-                else goto PRINTF_STATE_SPEC_;
-                break;
-
-            case PRINTF_STATE_LENGTH_LONG:
-                if (*format == 'l') {
-                    length = PRINTF_LENGTH_LONG_LONG;
-                    state = PRINTF_STATE_SPEC;
-                }
-                else goto PRINTF_STATE_SPEC_;
-                break;
-
-            case PRINTF_STATE_SPEC:
-            PRINTF_STATE_SPEC_:
-                switch (*format) {
-                    case 'c':   putc((char)*argp);
-                                argp++;
-                                break;
-
-                    case 's':   if (length == PRINTF_LENGTH_LONG || length == PRINTF_LENGTH_LONG_LONG) {
-                                    puts(*(const char**)argp);
-                                    argp += 2;
-                                }
-                                else {
-                                    puts(*(const char**)argp);
-                                    argp++;
-                                }
-                                break;
-
-                    case '%':   putc('%');
-                                break;
-
-                    case 'd':
-                    case 'i':   radix = 10; sign = true;
-                                argp = printf_number(argp, length, sign, radix);
-                                break;
-
-                    case 'u':   radix = 10; sign = false;
-                                argp = printf_number(argp, length, sign, radix);
-                                break;
-
-                    case 'X':
-                    case 'x':
-                                print_hex(*argp);
-                    case 'p':   radix = 16; sign = false;
-                                argp = printf_number(argp, length, sign, radix);
-                                break;
-
-                    case 'o':   radix = 8; sign = false;
-                                argp = printf_number(argp, length, sign, radix);
-                                break;
-
-                    // ignore invalid spec
-                    default:    break;
-                }
-
-                // reset state
-                state = PRINTF_STATE_NORMAL;
-                length = PRINTF_LENGTH_DEFAULT;
-                radix = 10;
-                sign = false;
-                break;
-        }
-
-        format++;
-    }
-    putc('\n');
 }
