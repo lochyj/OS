@@ -29,43 +29,27 @@ void kinit() {
 
 void login() {
     // Kernel LOGO
-    printf( " ____  _ _       _     ____   _____\n"
-            "|  _ \\| (_)     | |   / __ \\ / ____|\n"
-            "| |_) | |_ _ __ | | _| |  | | (___\n"
-            "|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n"
-            "| |_) | | | | | |   <| |__| |____) |\n"
-            "|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n"
-            "Kernel version: %s; User: %s;\n", KERNEL_VERSION, USER);
+    printf(" ____  _ _       _     ____   _____\n");
+    printf("|  _ \\| (_)     | |   / __ \\ / ____|\n");
+    printf("| |_) | |_ _ __ | | _| |  | | (___\n");
+    printf("|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n");
+    printf("| |_) | | | | | |   <| |__| |____) |\n");
+    printf("|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n");
+    printf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
     printf("terminal@%s> ", USER);
-}
-
-   void write_string( int colour, const char *string )
-{
-    volatile char *video = (volatile char*)0xB8000;
-    while( *string != 0 )
-    {
-        *video++ = *string++;
-        *video++ = colour;
-    }
 }
 
 void _kernel_main() {
 
-    //kinit();
-    //init_keyboard();
-    //login();
-    
-
-    clear_screen();
-    putc('a');
-
-    //write_string(0x0f, "Hello, There");
+    kinit();
+    init_keyboard();
+    login();
 
 
 }
 
-    // int a = alloc(sizeof(char));
-    // a = 'e';
-    // printf("%c", a);
+// int a = alloc(sizeof(char));
+// a = 'e';
+// printf("%c", a);
 
-    // init_console();
+// init_console();

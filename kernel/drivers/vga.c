@@ -4,43 +4,45 @@
 #include <stdint.h>
 
 void set_cursor(int offset) {
-    offset;
-	port_byte_out(0x3D4, 0x0F);
-	port_byte_out(0x3D5, (u8) (offset & 0xFF));
-	port_byte_out(0x3D4, 0x0E);
-	port_byte_out(0x3D5, (u8) ((offset >> 8) & 0xFF));
+	// port_byte_out(0x3D4, 0x0F);
+	// port_byte_out(0x3D5, (u8) (offset & 0xFF));
+	// port_byte_out(0x3D4, 0x0E);
+	// port_byte_out(0x3D5, (u8) ((offset >> 8) & 0xFF));
+    g_offset = offset;
 }
 
 int get_cursor() {
-    u16 pos = 0;
-    port_byte_out(0x3D4, 0x0F);
-    pos |= port_byte_in(0x3D5);
-    port_byte_out(0x3D4, 0x0E);
-    pos |= ((u16)port_byte_in(0x3D5)) << 8;
-    return pos;
+    // u16 pos = 0;
+    // port_byte_out(0x3D4, 0x0F);
+    // pos |= port_byte_in(0x3D5);
+    // port_byte_out(0x3D4, 0x0E);
+    // pos |= ((u16)port_byte_in(0x3D5)) << 8;
+    // return pos;
+
+    return g_offset;
 }
 
-// void enable_cursor(u8 cursor_start, u8 cursor_end)
-// {
-// 	port_byte_out(0x3D4, 0x0A);
-// 	port_byte_out(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
+void enable_cursor(u8 cursor_start, u8 cursor_end)
+{
+	port_byte_out(0x3D4, 0x0A);
+	port_byte_out(0x3D5, (port_byte_in(0x3D5) & 0xC0) | cursor_start);
  
-// 	port_byte_out(0x3D4, 0x0B);
-// 	port_byte_out(0x3D5, (inb(0x3D5) & 0xE0) | cursor_end);
-// }
+	port_byte_out(0x3D4, 0x0B);
+	port_byte_out(0x3D5, (port_byte_in(0x3D5) & 0xE0) | cursor_end);
+}
 
 void set_char_at_video_memory(char character, int offset) {
-    unsigned char *videoMemory = (unsigned char *) VIDEO_ADDRESS;
+    unsigned char *videoMemory = (unsigned char *) 0xB8000;
     videoMemory[offset] = character;
     videoMemory[offset + 1] = video_color;
 }
 
 int get_row_from_offset(int offset) {
-    return (offset * 2) / (2 * MAX_COLS);
+    return (offset / 2) / (2 * MAX_COLS);
 }
 
 int get_offset(int col, int row) {
-    return (row * MAX_COLS + col);
+    return 2 * (row * MAX_COLS + col);
 }
 
 int move_offset_to_new_line(int offset) {
@@ -49,8 +51,8 @@ int move_offset_to_new_line(int offset) {
 
 int scroll_ln(int offset) {
     memory_copy(
-            (u8 *) (get_offset(0, 1) + VIDEO_ADDRESS),
-            (u8 *) (get_offset(0, 0) + VIDEO_ADDRESS),
+            (u8 *) (get_offset(0, 1) + 0xB8000),
+            (u8 *) (get_offset(0, 0) + 0xB8000),
             MAX_COLS * (MAX_ROWS - 1) * 2
     );
 
@@ -59,24 +61,6 @@ int scroll_ln(int offset) {
     }
 
     return offset - 2 * MAX_COLS;
-}
-
-void print_string(char *string) {
-    int offset = get_cursor();
-    int i = 0;
-    while (string[i] != 0) {
-        if (offset >= MAX_ROWS * MAX_COLS * 2) {
-            offset = scroll_ln(offset);
-        }
-        if (string[i] == '\n') {
-            offset = move_offset_to_new_line(offset);
-        } else {
-            set_char_at_video_memory(string[i], offset);
-            offset += 2;
-        }
-        i++;                                            
-    }
-    set_cursor(offset);
 }
 
 void putc(char chr) {
@@ -93,6 +77,23 @@ void putc(char chr) {
         offset += 2;
     }
 
+    set_cursor(offset);
+}
+
+void print_string(char *string) {
+    int i = 0;
+    int offset = 0;
+    while (string[i] != 0) {
+        if (offset >= MAX_ROWS * MAX_COLS * 2) {
+            scroll_ln(offset);
+        }
+        if (string[i] == '\n') {
+            move_offset_to_new_line(offset);
+        } else {
+            putc(string[i]);
+        }
+        i++;                                            
+    }
     set_cursor(offset);
 }
 

@@ -19,6 +19,8 @@ int get_cursor();
 // Current display color
 char video_color = 0x0F;
 
+int g_offset = 0;
+
 void set_char_at_video_memory(char character, int offset);
 
 int get_row_from_offset(int offset);
