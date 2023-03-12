@@ -96,8 +96,8 @@ static void keyboard_callback(registers_t *regs) {
         }
         
         append(key_buffer, letter);
-        char str[2] = {letter, '\0'};
-        print_string(str);
+        putc(letter);
+        putc('\0');
     }
 }
 
@@ -108,7 +108,7 @@ void init_keyboard() {
 char* kinput() {
     waiting_for_input = true;
     while (!input_returned) {
-        {};
+        __asm__("nop");
     }
 
     if (!input_returned) return "Error: Input not returned\0";

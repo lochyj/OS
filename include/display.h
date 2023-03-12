@@ -7,28 +7,29 @@
 #define VGA_OFFSET_LOW 15
 #define VGA_OFFSET_HIGH 14
 
-void set_cursor(int offset);
+void set_cursor(int x, int y);
 
-int get_cursor();
+u16 get_cursor();
 
 #define VIDEO_ADDRESS 0xB8000
 #define MAX_ROWS 25             //* 25 x Characters
 #define MAX_COLS 80             //* 80 x Characters
 
+#define VGA_WIDTH 80            //* 80 x Characters
+
 // 0x0f is WHITE text on a BLACK background
 // Current display color
 char video_color = 0x0F;
 
-int g_offset = 0;
+void set_char_at_video_memory(char character, u16 offset);
 
-void set_char_at_video_memory(char character, int offset);
+int get_x_from_offset(int offset);
+int get_y_from_offset(int offset);
 
-int get_row_from_offset(int offset);
+u16 get_offset(int x, int y);
+u16 move_offset_to_new_line(int x, int y);
 
-int get_offset(int col, int row);
-int move_offset_to_new_line(int offset);
-
-int scroll_ln(int offset);
+u16 scroll_ln(int x, int y);
 
 void print_string(char *string);
 
