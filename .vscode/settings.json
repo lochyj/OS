@@ -14,5 +14,6 @@
         "Lctrl",
         "Spacebar"
     ],
-    "discord.enabled": true
+    "discord.enabled": true,
+    "godot_tools.scene_file_config": "c:\\Users\\lochy\\OneDrive\\Documents\\GitHub\\OS"
 }

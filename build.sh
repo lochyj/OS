@@ -1,50 +1,46 @@
+#!/bin/bash
 clear
 
-echo "---- Removing old files ----"
+rm -rf ./build/*
+rm -rf ./build/image/*
 
-rm -rf ./out/*
-rm -rf ./out/image/*
+rm ./build/isodir/
 
-mkdir ./out/image
-mkdir ./isodir/boot/grub
+mkdir ./build/
+mkdir ./build/image/
+mkdir ./build/isodir/boot/grub/
 
 echo "---- Building ASM ----"
 
-nasm -felf32 ./boot/boot.asm -o ./out/boot.out
-
-nasm ./kernel/cpu/interrupt.asm -felf32 -o ./out/kasm.out
+nasm -felf32 ./boot/boot.asm -o ./build/boot.out
 
 echo "---- Compiling C ----"
 
-# Compiling the C code
-
-gcc -m32 -g -O2 -fno-pie -ffreestanding -fno-stack-protector -I . -I ./libc/inc -c ./kernel/kernel.c -o ./out/kernel.out
+gcc -m32 -g -O2 -fno-pie -ffreestanding -fno-stack-protector -I ./include/ -c ./kernel/kernel.c -o ./build/kernel.out
 
 echo "---- Linking output files ----"
 
-ld -m elf_i386 -T ./linker.ld -o ./out/kernel.bin ./out/boot.out ./out/kasm.out ./out/kernel.out -nostdlib
-# -e main -Ttext 0x9000
+ld -m elf_i386 -T ./linker.ld -o ./out/kernel.bin ./out/boot.out ./out/kernel.out -nostdlib
 
 echo "-------- x86 check --------"
+
 if grub-file --is-x86-multiboot ./out/kernel.bin; then
-  echo multiboot confirmed
+  echo "Kernel binary is multiboot."
 else
-  echo the file is not multiboot
+  echo "Kernel binary is not multiboot - check above for errors."
 fi
 
 echo "-------- copy --------"
 
-# Copy the kernel to the isodir
-cp ./out/kernel.bin ./isodir/boot/kernel.bin
-cp ./grub.cfg ./isodir/boot/grub/grub.cfg
+cp ./build/kernel.bin ./build/isodir/boot/kernel.bin
+cp ./grub.cfg ./build/isodir/boot/grub/grub.cfg
 
 echo "-------- iso build --------"
 
-# Build the ISO file for running in QEMU
-grub-mkrescue -o ./out/image/BlinkOS.iso isodir
+cd ./build/
+grub-mkrescue -o ./build/image/BlinkOS.iso isodir
+cd ../
 
 echo "---- Running in QEMU ----"
 
-#qemu-system-i386 -kernel ./out/kernel.bin -monitor stdio
-
-qemu-system-i386 -cdrom ./out/image/BlinkOS.iso -monitor stdio
+qemu-system-i386 -cdrom ./build/image/BlinkOS.iso -monitor stdio
