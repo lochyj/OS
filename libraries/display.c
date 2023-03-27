@@ -1,5 +1,6 @@
 #include "types.h"
 #include "string.h"
+#include "debug.h"
 
 void enable_cursor(uint8_t cursor_start, uint8_t cursor_end) {
 	outb(0x3D4, 0x0A);
@@ -32,40 +33,61 @@ uint16_t get_cursor_position(void) {
     return pos;
 }
 
-uint16_t get_offset(uint16_t x, uint16_t y) {
-    return (x * VGA_WIDTH + y);
-}
+/*  Source: https://wiki.osdev.org/Printing_To_Screen
+    VGA Text Mode Colour Table
+    Color number 	Color name
+    0 	            Black
+    1 	            Blue
+    2 	            Green
+    3 	            Cyan
+    4 	            Red
+    5 	            Purple
+    6 	            Brown
+    7 	            Gray
+    8 	            Dark Gray
+    9 	            Light Blue
+    10 || A 	    Light Green
+    11 || B	        Light Cyan
+    12 || C	        Light Red
+    13 || D	        Light Purple
+    14 || E	        Yellow
+    15 || F	        White
 
-uint16_t set_new_line(uint16_t pos) {
-	return get_offset(0, (pos / VGA_WIDTH) + 1);
-}
-
-uint16_t VGA_LOC = 0;
+    VGA Colour Code: 0xYZ
+    Where Y is the background color
+    And Z is the text color
+    EG: 
+        0x4F is white text on a red background,
+        0x0F is white text on a black background.
+*/
 
 void kputc(char c) {
 	if(chrcmp(c, '\0') == 0) return;
-
-	volatile char *vga = (volatile char *)VGA_ADDR;
-	uint16_t location = VGA_LOC;
-
-	if( chrcmp(c, '\n') == 0) {
-		location = set_new_line(location);
-		VGA_LOC = location;
-		update_cursor(location / VGA_WIDTH, location % VGA_WIDTH);
+	
+	if(chrcmp(c, '\n') == 0) {
+		y++;
+		x = 0;
+        update_cursor(x, y);
 		return;
 	}
-	vga[location] = c;
-	vga[location + (uint16_t)1] = VGA_COLOUR;
 
-	// We incease the location by 2 because the vga Buffer takes 2 bytes as input for each character displayed: 0xCCcc cc is where the 8bit colour code is stored and CC is the character code.
-	location += (uint16_t)2;
+	if (x >= VGA_WIDTH) {
+		x = 0;
+		y++;
+	}
 
-	VGA_LOC = location;
-	update_cursor(location / VGA_WIDTH, location % VGA_WIDTH);
+	ASSERT(x < VGA_WIDTH);
+
+	volatile char* display = (volatile char*) VGA_ADDR;
+
+	display[(y * VGA_WIDTH + x) * 2] = c;
+	display[(y * VGA_WIDTH + x) * 2 + 1] = VGA_COLOUR;
+	x++;
+	update_cursor(x, y);
 }
 
-void kprint_s(char* string) {
-    for (int i = 0; string[i] != 0; i++) {
-		kputc(string[i]);
-    }
+void kprint_s(const char* string) {
+    while( *string != 0 ) {
+		kputc(*string++);
+	}
 }

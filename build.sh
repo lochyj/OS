@@ -8,13 +8,15 @@ echo "---- Building ASM ----"
 
 nasm -felf32 ./boot/boot.asm -o ./build/boot.out
 
+nasm -f elf32 ./assemblies/interrupts.asm -o ./build/kernel_asm.out
+
 echo "---- Compiling C ----"
 
 gcc -m32 -g -O2 -fno-pie -ffreestanding -fno-stack-protector -I ./include/ -I ./ -c ./kernel/kernel.c -o ./build/kernel.out
 
 echo "---- Linking output files ----"
 
-ld -m elf_i386 -T ./linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out -nostdlib
+ld -m elf_i386 -T ./linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/kernel_asm.out -nostdlib
 
 echo "-------- x86 check --------"
 
