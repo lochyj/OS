@@ -128,6 +128,7 @@ void isr_handler(registers_t *r) {
 
 void register_interrupt_handler(uint8_t n, isr_t handler) {
     interrupt_handlers[n] = handler;
+    kprintf("register_interrupt_handler called\n");
 }
 
 void irq_handler(registers_t *r) {

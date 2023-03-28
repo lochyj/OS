@@ -50,11 +50,12 @@ static void keyboard_callback(registers_t *regs) {
         letter = sc_ascii_lower[(int) scancode];
     }
 
-    char[2] str = {letter, '\0'};
+    char str[2] = {letter, '\0'};
 
     kprint_s(str);
 }
 
 void init_keyboard() {
     register_interrupt_handler(IRQ1, keyboard_callback);
+    kprintf("init_keyboard called\n");
 }

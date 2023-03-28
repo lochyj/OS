@@ -4,7 +4,8 @@
 #include "kernel/system/idt.h"
 #include "kernel/system/isr.h"
 #include "kernel/drivers/keyboard.h"
-#include "blink/kprintf.h"
+
+#include "Blink/kprintf.h"
 
 const char* KERNEL_VERSION = "v0.1.0";
 const char* USER = "Lochyj";
@@ -36,6 +37,8 @@ void __kernel_main() {
     kprintf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
 
     kprintf("terminal@%s> ", USER);
+
+    kprintf("\n");
 
     for(;;) {
         asm("hlt");
