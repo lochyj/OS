@@ -43,6 +43,11 @@ void int_to_string(int n, char str[]) {
     reverse(str);
 }
 
+int hex_to_int(uint8_t hex) {
+    int n = (int) hex;
+    return n;
+}
+
 //
 
 #define PRINTF_STATE_NORMAL         0
@@ -133,7 +138,9 @@ void kprintf(const char* format, ...) {
                                 break;
 
                     case 'X':
-                    case 'x':
+                    case 'x':   char buffer[32];
+                                int_to_string(hex_to_int((char)*argp), buffer);
+                                puts(buffer);
                                 break;
                     case 'p':   radix = 16; sign = false;
                                 argp = kprintf_number(argp, length, sign, radix);

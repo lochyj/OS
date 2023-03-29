@@ -1,3 +1,5 @@
+#pragma once
+
 //! The below code has been copied directly from the openBSD repository: https://github.com/openbsd/src/ 
 
 /*-
@@ -31,6 +33,18 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
 */
+
+
+void* memset(void *dst, int c, size_t n) {
+	if (n != 0) {
+		unsigned char *d = dst;
+
+		do
+			*d++ = (unsigned char)c;
+		while (--n != 0);
+	}
+	return (dst);
+}
 
 // Compare strings
 int strcmp(const char *s1, const char *s2) {

@@ -8,7 +8,15 @@ echo "---- Building ASM ----"
 
 nasm -felf32 ./boot/boot.asm -o ./build/boot.out
 
-nasm -f elf32 ./assemblies/interrupts.asm -o ./build/kernel_asm.out
+# Build all of the kernels assembly files from the ./assemblies/ directory
+# TODO: Automate this
+nasm -f elf32 ./assemblies/gdt.asm -o ./build/gdt.out
+
+nasm -f elf32 ./assemblies/idt.asm -o ./build/idt.out
+
+nasm -f elf32 ./assemblies/irq.asm -o ./build/irq.out
+
+nasm -f elf32 ./assemblies/isr.asm -o ./build/isr.out
 
 echo "---- Compiling C ----"
 
@@ -16,7 +24,7 @@ gcc -m32 -g -O2 -fno-pie -ffreestanding -fno-stack-protector -I ./include/ -I ./
 
 echo "---- Linking output files ----"
 
-ld -m elf_i386 -T ./linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/kernel_asm.out -nostdlib
+ld -m elf_i386 -T ./linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/gdt.out ./build/idt.out ./build/irq.out ./build/isr.out -nostdlib
 
 echo "-------- x86 check --------"
 

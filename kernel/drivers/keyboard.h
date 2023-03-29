@@ -29,7 +29,7 @@ enum {
     CAPS_LOCK = 0x3A,
 };
 
-static void keyboard_callback(registers_t *regs);
+static void keyboard_callback(regs_t *regs);
 void init_keyboard();
 
 #include "kernel/drivers/keyboard.c"

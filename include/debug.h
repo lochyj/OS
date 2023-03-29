@@ -10,4 +10,7 @@ static void ERROR(const char* file, int line);
 
 #define PANIC(message) do {__DEBUG_PANIC(__FILE__, __LINE__, message);} while (0)
 
+// TODO: What does this do?
+//__QUOTEME(__LINE__);
+
 #define ASSERT(expr) do {if (!(expr)) __DEBUG_ERROR(__FILE__, __LINE__);} while (0)

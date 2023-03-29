@@ -1,4 +1,4 @@
-#include "kernel/system/isr.h"
+#include "kernel/system/interrupt/isr.h"
 #include "port.h"
 #include "display.h"
 #include "debug.h"
@@ -8,7 +8,7 @@ int shift = false;
 int ctrl = false;
 int alt = false;
 
-static void keyboard_callback(registers_t *regs) {
+static void keyboard_callback(regs_t *regs) {
     uint8_t scancode = inb(0x60);
 
     if (scancode > 0x80) {
@@ -56,6 +56,5 @@ static void keyboard_callback(registers_t *regs) {
 }
 
 void init_keyboard() {
-    register_interrupt_handler(IRQ1, keyboard_callback);
-    kprintf("init_keyboard called\n");
+    irq_install_handler(1, keyboard_callback);
 }
