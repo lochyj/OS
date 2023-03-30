@@ -1,3 +1,6 @@
+#include "Blink/kprintf.h"
+#include "port.h"
+
 void timer_phase(int hz) {
     int divisor = 1193180 / hz;       /* Calculate our divisor */
     outb(0x43, 0x36);             /* Set our command byte 0x36 */
@@ -22,7 +25,7 @@ void timer_handler(struct regs *r) {
     *  display a message on the screen */
     if (timer_ticks % 18 == 0)
     {
-        puts("One second has passed\n");
+        kprintf("One second has passed\n");
     }
 }
 

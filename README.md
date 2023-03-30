@@ -58,6 +58,7 @@ In the meantime here is a list of things i want to implement:
 - [The Linux contributors - Repo](https://github.com/torvalds/linux)
 - [The OpenBSD contributors - Repo](https://github.com/openbsd/src)
 - [Austanss - Repo](https://github.com/austanss/skylight/)
+- [Bran - Tutorial](http://www.osdever.net/bkerndev/Docs/title.htm)
 
 ## Legal
 

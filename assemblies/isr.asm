@@ -227,5 +227,4 @@ isr_common_stub:
 	add esp, 8	; Cleans up pushed error code and pushed ISR
 			; number.
 	sti
-	iret		; Pops 5 things at once: CS, EIP, EFLAGS, SS and ESP!
-
+	iret		; Pops 5 things at once: CS, EIP, EFLAGS, SS and ESP
