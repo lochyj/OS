@@ -1,1 +1,0 @@
-I will port the std library from OpenBSD to my kernel and place it into this directory.
