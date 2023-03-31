@@ -1,50 +1,40 @@
-clear
+nasm -f elf32 -o ./build/boot.out ./assemblies/boot.asm
 
-echo "---- Removing old files ----"
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/kernel.out ./kernel/kernel.c
 
-rm -rf ./out/*
-rm -rf ./out/image/*
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/utilities.out ./kernel/utilities.c
 
-mkdir ./out/image
-mkdir ./isodir/boot/grub
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/display.out ./kernel/drivers/display/display.c
 
-echo "---- Building ASM ----"
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/gdt.out ./kernel/system/gdt/gdt.c
 
-nasm -felf32 ./boot/boot.asm -o ./out/boot.out
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/idt.out ./kernel/system/interrupts/idt.c
 
-nasm ./kernel/cpu/interrupt.asm -felf32 -o ./out/kasm.out
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/isr.out ./kernel/system/interrupts/isr.c
 
-echo "---- Compiling C ----"
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/irq.out ./kernel/system/interrupts/irq.c
 
-# Compiling the C code
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/clock.out ./kernel/system/clock/clock.c
 
-gcc -m32 -g -O2 -fno-pie -ffreestanding -fno-stack-protector -I . -I ./libc/inc -c ./kernel/kernel.c -o ./out/kernel.out
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/keyboard.out ./kernel/drivers/keyboard/keyboard.c
 
-echo "---- Linking output files ----"
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/debug.out ./kernel/system/debug/debug.c
 
-ld -m elf_i386 -T ./linker.ld -o ./out/kernel.bin ./out/boot.out ./out/kasm.out ./out/kernel.out -nostdlib
-# -e main -Ttext 0x9000
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/kprintf.out ./kernel/utilities/kprintf.c
 
-echo "-------- x86 check --------"
-if grub-file --is-x86-multiboot ./out/kernel.bin; then
+ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/display.out ./build/utilities.out ./build/gdt.out ./build/idt.out ./build/isr.out ./build/irq.out ./build/clock.out ./build/keyboard.out ./build/debug.out ./build/kprintf.out -nostdlib
+
+if grub2-file --is-x86-multiboot ./build/kernel.bin; then
   echo multiboot confirmed
 else
   echo the file is not multiboot
 fi
 
-echo "-------- copy --------"
-
-# Copy the kernel to the isodir
-cp ./out/kernel.bin ./isodir/boot/kernel.bin
+cp ./build/kernel.bin ./isodir/boot/kernel.bin
 cp ./grub.cfg ./isodir/boot/grub/grub.cfg
 
-echo "-------- iso build --------"
+grub2-mkrescue -o ./build/image/BlinkOS.iso isodir
 
-# Build the ISO file for running in QEMU
-grub-mkrescue -o ./out/image/BlinkOS.iso isodir
+#qemu-system-i386 -kernel ./build/kernel.bin
 
-echo "---- Running in QEMU ----"
-
-#qemu-system-i386 -kernel ./out/kernel.bin -monitor stdio
-
-qemu-system-i386 -cdrom ./out/image/BlinkOS.iso -monitor stdio
+qemu-system-i386 -cdrom ./build/image/BlinkOS.iso
