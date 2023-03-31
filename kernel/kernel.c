@@ -1,5 +1,8 @@
 #include "system.h"
 
+const char* KERNEL_VERSION = "v0.1.0";
+const char* USER = "Lochyj";
+
 void kernel_main() {
     // Initialise the GDT, IDT, ISRs and IRQs
     gdt_install();
@@ -9,14 +12,17 @@ void kernel_main() {
 
     init_video();
 
-    //timer_install();
-
     keyboard_install();
 
     asm_sti();
 
-    puts("Hello, kernel World!");
+    kprintf(" ____  _ _       _     ____   _____\n");
+    kprintf("|  _ \\| (_)     | |   / __ \\ / ____|\n");
+    kprintf("| |_) | |_ _ __ | | _| |  | | (___\n");
+    kprintf("|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n");
+    kprintf("| |_) | | | | | |   <| |__| |____) |\n");
+    kprintf("|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n");
+    kprintf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
 
-    // Infinite loop to prevent the kernel from exiting.
-    for (;;);
+    kprintf("terminal@%s> ", USER);
 }
