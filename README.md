@@ -59,6 +59,7 @@ In the meantime here is a list of things i want to implement:
 - [The OpenBSD contributors - Repo](https://github.com/openbsd/src)
 - [Austanss - Repo](https://github.com/austanss/skylight/)
 - [Bran - Tutorial](http://www.osdever.net/bkerndev/Docs/title.htm)
+- [James Molloy - Tutorial](http://www.jamesmolloy.co.uk/tutorial_html/)
 
 ## Legal
 

@@ -1,4 +1,5 @@
 #include "system.h"
+#include "kernel/system/vmem/page.h"
 
 const char* KERNEL_VERSION = "v0.1.0";
 const char* USER = "Lochyj";
@@ -14,6 +15,8 @@ void kernel_main() {
 
     keyboard_install();
 
+    initialise_paging();
+
     asm_sti();
 
     kprintf(" ____  _ _       _     ____   _____\n");
@@ -25,4 +28,10 @@ void kernel_main() {
     kprintf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
 
     kprintf("terminal@%s> ", USER);
+
+    kprintf("yoo");
+
+    uint32_t *ptr = (uint32_t*)0xA0000000;
+    uint32_t do_page_fault = *ptr;
+
 }

@@ -22,7 +22,11 @@ gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nos
 
 gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/kprintf.out ./kernel/utilities/kprintf.c
 
-ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/display.out ./build/utilities.out ./build/gdt.out ./build/idt.out ./build/isr.out ./build/irq.out ./build/clock.out ./build/keyboard.out ./build/debug.out ./build/kprintf.out -nostdlib
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/kmalloc.out ./kernel/system/vmem/kmalloc.c
+
+gcc -m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -I . -I ./include/ -c -o ./build/page.out ./kernel/system/vmem/page.c
+
+ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/display.out ./build/utilities.out ./build/gdt.out ./build/idt.out ./build/isr.out ./build/irq.out ./build/clock.out ./build/keyboard.out ./build/debug.out ./build/kprintf.out ./build/kmalloc.out ./build/page.out -nostdlib
 
 if grub2-file --is-x86-multiboot ./build/kernel.bin; then
   echo multiboot confirmed
