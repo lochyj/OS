@@ -1,10 +1,15 @@
 #include "system.h"
-#include "kernel/system/vmem/page.h"
+//#include "kernel/system/vmem/page.h"
+#include "blink/multiboot.h"
+#include "debug.h"
+#include "kernel/system/vmem/memory.h"
 
-const char* KERNEL_VERSION = "v0.1.0";
-const char* USER = "Lochyj";
+const char* KERNEL_VERSION = "v0.1.2";
 
-void kernel_main() {
+void kernel_main(struct multiboot_info_t* mboot) {
+
+    ASSERT(mboot->magic & MULTIBOOT_BOOTLOADER_MAGIC);   //!- mboot->magic & 0x2BADB002 should resolve to be 0x11111111 if the magic number is correct
+
     // Initialise the GDT, IDT, ISRs and IRQs
     gdt_install();
     idt_install();
@@ -15,7 +20,7 @@ void kernel_main() {
 
     keyboard_install();
 
-    initialise_paging();
+    //initialise_paging();
 
     asm_sti();
 
@@ -25,13 +30,10 @@ void kernel_main() {
     kprintf("|  _ <| | | '_ \\| |/ / |  | |\\___ \\ \n");
     kprintf("| |_) | | | | | |   <| |__| |____) |\n");
     kprintf("|____/|_|_|_| |_|_|\\_\\\\____/|_____/\n");
-    kprintf("Kernel version %s; User: %s\n", KERNEL_VERSION, USER);
+    kprintf("Kernel version %s;\n", KERNEL_VERSION);
 
-    kprintf("terminal@%s> ", USER);
+    kprintf("terminal@%s> ", "test");
 
-    kprintf("yoo");
-
-    uint32_t *ptr = (uint32_t*)0xA0000000;
-    uint32_t do_page_fault = *ptr;
+    kprintf("ok");
 
 }

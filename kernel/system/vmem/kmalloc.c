@@ -6,9 +6,9 @@ uint32_t placement_address = (uint32_t)&end;
 
 static uint32_t kmalloc_internal(uint32_t sz, int align, uint32_t *phys) {
 
-    if (align == 1 && (placement_address & 0x00000FFF)) {
+    if (align == 1 && (placement_address & 0xFFFFF000)) {
         // Align the placement address;
-        placement_address &= 0x00000FFF;
+        placement_address &= 0xFFFFF000;
         placement_address += 0x1000;
     }
 
