@@ -1,4 +1,6 @@
 #include "system.h"
+#include "kernel/system/vmem/page.h"
+#include "debug.h"
 
 
 /* These are function prototypes for all of the exception
@@ -127,15 +129,26 @@ char* exception_messages[] =
 *  serviced as a 'locking' mechanism to prevent an IRQ from
 *  happening and messing up kernel data structures */
 void fault_handler(struct regs *r) {
-    puts("irq");
+    switch (r->int_no) {
+		case 13:
+			return;
+		case 14:
+			/* Page fault; send to page.c */
+			page_fault(r);
+			return;
+		default:
+			/* Not something we want to handle
+			 * specially, so let it fall through
+			 * to the if statement below */
+			break;
+	}
+
+
     /* Is this a fault whose number is from 0 to 31? */
-    if (r->int_no < 32)
-    {
+    if (r->int_no < 32) {
         /* Display the description for the Exception that occurred.
         *  In this tutorial, we will simply halt the system using an
         *  infinite loop */
-        puts(exception_messages[r->int_no]);
-        puts(" Exception. System Halted!\n");
-        for (;;);
+        PANIC(exception_messages[r->int_no]);
     }
 }

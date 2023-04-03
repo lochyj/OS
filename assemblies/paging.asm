@@ -1,13 +1,3 @@
-global loadPageDir
-loadPageDir:
-    push ebp
-    mov ebp, esp
-    mov eax, 8[ebp]
-    mov cr3, eax
-    mov esp, ebp
-    pop ebp
-    ret
-
 global enablePaging
 enablePaging:
     push ebp

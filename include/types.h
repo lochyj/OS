@@ -14,7 +14,7 @@ typedef uint64_t        size_t;
 typedef uint16_t        wchar_t;
 typedef uint32_t        uintptr_t;
 
-typedef unsigned long int addr;
+typedef unsigned int addr;
 
 typedef uint32_t        bool;
 

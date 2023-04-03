@@ -27,14 +27,14 @@ gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline
 echo "Compiling ordered_array.c ..."
 gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/ordered_array.out ./kernel/utilities/ordered_array.c
 echo "Compiling kmalloc.c ..."
-gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/kmalloc.out ./kernel/system/vmem/kmalloc.c
+gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/memory.out ./kernel/system/vmem/memory.c
 echo "Compiling page.c ..."
-#gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/page.out ./kernel/system/vmem/page.c
+gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/page.out ./kernel/system/vmem/page.c
 echo "Compiling heap.c ..."
 #gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/heap.out ./kernel/system/vmem/heap.c
 
 echo "Linking..."
-ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/display.out ./build/utilities.out ./build/gdt.out ./build/idt.out ./build/isr.out ./build/irq.out ./build/clock.out ./build/keyboard.out ./build/debug.out ./build/kprintf.out ./build/ordered_array.out ./build/kmalloc.out -nostdlib
+ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/display.out ./build/utilities.out ./build/gdt.out ./build/idt.out ./build/isr.out ./build/irq.out ./build/clock.out ./build/keyboard.out ./build/debug.out ./build/kprintf.out ./build/ordered_array.out ./build/memory.out ./build/pagingAsm.out ./build/page.out -nostdlib
 
 if grub2-file --is-x86-multiboot ./build/kernel.bin; then
   echo multiboot confirmed

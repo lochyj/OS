@@ -163,9 +163,7 @@ const char g_HexChars[] = "0123456789abcdef";
 
 int* kprintf_number(int* argp, int length, int sign, int radix) {
     char buffer[32];
-    unsigned long long number;
-    int number_sign = 1;
-    int pos = 0;
+    unsigned long long number = NULL;
 
     // process length
     switch (length) {
@@ -177,7 +175,6 @@ int* kprintf_number(int* argp, int length, int sign, int radix) {
                 if (n < 0)
                 {
                     n = -n;
-                    number_sign = -1;
                 }
                 number = (unsigned long long)n;
             }
@@ -193,7 +190,6 @@ int* kprintf_number(int* argp, int length, int sign, int radix) {
                 if (n < 0)
                 {
                     n = -n;
-                    number_sign = -1;
                 }
                 number = (unsigned long long)n;
             }
@@ -209,7 +205,6 @@ int* kprintf_number(int* argp, int length, int sign, int radix) {
                 if (n < 0)
                 {
                     n = -n;
-                    number_sign = -1;
                 }
                 number = (unsigned long long)n;
             }

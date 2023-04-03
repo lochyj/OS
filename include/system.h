@@ -10,7 +10,7 @@ struct regs {
     uint32_t eip, cs, eflags, useresp, ss;              /* pushed by the processor automatically */ 
 };
 
-extern void asm_sti();
+extern void _sti();
 
 void* memcpy(void* dest, const void* src, int count);
 void* memset(void* dest, unsigned char val, int count);

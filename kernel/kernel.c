@@ -1,28 +1,27 @@
 #include "system.h"
-//#include "kernel/system/vmem/page.h"
 #include "blink/multiboot.h"
 #include "debug.h"
 #include "kernel/system/vmem/memory.h"
+#include "kernel/system/vmem/page.h"
 
 const char* KERNEL_VERSION = "v0.1.2";
 
-void kernel_main(struct multiboot_info_t* mboot) {
+void kernel_main(multiboot_info_t* mboot) {
 
-    ASSERT(mboot->magic & MULTIBOOT_BOOTLOADER_MAGIC);   //!- mboot->magic & 0x2BADB002 should resolve to be 0x11111111 if the magic number is correct
+    //ASSERT(mboot->magic & MULTIBOOT_BOOTLOADER_MAGIC);   //!- mboot->magic & 0x2BADB002 should resolve to be 0x11111111 if the magic number is correct
 
     // Initialise the GDT, IDT, ISRs and IRQs
     gdt_install();
     idt_install();
     isr_install();
     irq_install();
-
     init_video();
+
+    _sti();
 
     keyboard_install();
 
-    //initialise_paging();
-
-    asm_sti();
+    initialise_paging();
 
     kprintf(" ____  _ _       _     ____   _____\n");
     kprintf("|  _ \\| (_)     | |   / __ \\ / ____|\n");
@@ -34,6 +33,6 @@ void kernel_main(struct multiboot_info_t* mboot) {
 
     kprintf("terminal@%s> ", "test");
 
-    kprintf("ok");
+    kprintf("ok12");
 
 }

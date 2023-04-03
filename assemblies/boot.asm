@@ -5,7 +5,6 @@
 [BITS 32]
 global start
 start:
-    mov esp, _sys_stack     ; This points the stack to our new stack area
     jmp stublet
 
 ; This part MUST be 4byte aligned, so we solve that issue using 'ALIGN 4'
@@ -34,14 +33,15 @@ mboot:
     dd start
 
 stublet:
+    push esp
+    push ebx
     extern kernel_main
-    cli
     call kernel_main
     jmp $
 
-global asm_sti
+global _sti
 
-asm_sti:
+_sti:
     sti
     ret
 
@@ -155,6 +155,7 @@ isr5:
 ;  6: Invalid Opcode Exception
 isr6:
     cli
+    xchg bx, bx
     push byte 0
     push byte 6
     jmp isr_common_stub
@@ -338,28 +339,29 @@ extern fault_handler
 ; up for kernel mode segments, calls the C-level fault handler,
 ; and finally restores the stack frame.
 isr_common_stub:
-    pusha
-    push ds
-    push es
-    push fs
-    push gs
-    mov ax, 0x10   ; Load the Kernel Data Segment descriptor!
-    mov ds, ax
+	pusha		; Pushes edi, esi, ebp, esp, ebx, edx, ecx, eax
+
+	mov ax, ds	; Lower 16-bits of eax = ds
+	push eax	; Save the data segment descriptor
+
+	mov ax, 0x10	; Load the kernel data segment descriptor
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+
+	call fault_handler
+
+	pop eax		; Reload the original data segment descriptor
+	mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov eax, esp   ; Push us the stack
-    push eax
-    mov eax, fault_handler
-    call eax       ; A special call, preserves the 'eip' register
-    pop eax
-    pop gs
-    pop fs
-    pop es
-    pop ds
-    popa
-    add esp, 8     ; Cleans up the pushed error code and pushed ISR number
-    iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
+
+	popa
+	add esp, 8	; Cleans up pushed error code and pushed ISR number.
+	sti
+	iret		; Pops 5 things at once: CS, EIP, EFLAGS, SS and ESP!
 
 global irq0
 global irq1
@@ -496,37 +498,29 @@ extern irq_handler
 ; This is a stub that we have created for IRQ based ISRs. This calls
 ; 'irq_handler' in our C code. We need to create this in an 'irq.c'
 irq_common_stub:
-    pusha
-    push ds
-    push es
-    push fs
-    push gs
+    pusha           ; Pushes edi, esi, ebp, esp, ebx, edx, ecx, eax
 
-    mov ax, 0x10
+    mov ax, ds      ; Lower 16-bits of eax = ds
+    push eax        ; Save the data segment descriptor
+
+    mov ax, 0x10    ; Load the kernel data segment descriptor
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov eax, esp
 
-    push eax
-    mov eax, irq_handler
-    call eax
-    pop eax
+    call irq_handler
 
-    pop gs
-    pop fs
-    pop es
-    pop ds
-    popa
-    add esp, 8
-    iret
+    pop eax         ; Reload the original data segment descriptor
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
 
+    popa            ; Pops edi, esi, ebp...
+    add esp, 8      ; Cleans up pushed error code and pushed ISR number.
+    sti
+    iret            ; Pops 5 things at once: CS, EIP, EFLAGS, SS and ESP!
 
-; Here is the definition of our BSS section. Right now, we'll use
-; it just to store the stack. Remember that a stack actually grows
-; downwards, so we declare the size of the data before declaring
-; the identifier '_sys_stack'
 SECTION .bss
-    resb 8192               ; This reserves 8KBytes of memory here
-_sys_stack:
+    resb 8192               ; This reserves 8kb of memory here
