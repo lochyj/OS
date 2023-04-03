@@ -1,6 +1,6 @@
 #pragma once
 
-void __debug_print(const char* string);
+void __debug_print(const char* string, int offset);
 
 char* __debug_itoa(int val, int base);
 
