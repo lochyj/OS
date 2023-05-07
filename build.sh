@@ -4,9 +4,11 @@ echo "Compiling kernel.c ..."
 gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/kernel.out ./kernel/kernel.c
 echo "Compiling utilities.c ..."
 gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/utilities.out ./kernel/utilities.c
+echo "Compiling string.c ..."
+gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wunused-function -Wpointer-sign -Wunused-function -Wunused-variable -I . -I ./include/ -c -o ./build/string.out ./libc/string.c
 
 echo "Linking..."
-ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/utilities.out -nostdlib
+ld -m elf_i386 -T linker.ld -o ./build/kernel.bin ./build/boot.out ./build/kernel.out ./build/utilities.out ./build/string.out -nostdlib
 
 if grub2-file --is-x86-multiboot ./build/kernel.bin; then
   echo multiboot confirmed
