@@ -1,12 +1,14 @@
 #pragma once
 
 #include <stdint.h>
+#include <string.h>
 
-// Info on the pointer and its use. https://wiki.osdev.org/Printing_To_Screen
-uint16_t *textmemptr = (uint16_t *)0xB8000;
-int text_color = 0x0F;
+#include "blink/blink.h"
 
-// Cursor x and y positions
-int csr_x = 0, csr_y = 0;
+// cursor.c
+void move_csr();
+void clear_screen();
 
-void kprint(char* str);
+// display.c
+void putc(char c);
+void puts(char *text);
