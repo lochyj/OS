@@ -1,15 +1,14 @@
 #include "kernel/drivers/display.h"
 
-// Info on the pointer and its use. https://wiki.osdev.org/Printing_To_Screen
-static uint16_t *textmemptr = (uint16_t *)0xB8000;
-static int text_color = 0x0F;
+int cursor_x = 0, cursor_y = 0;
 
-static const int SCREEN_WIDTH = 80;
-static const int SCREEN_HEIGHT = 25;
-
-static int cursor_x = 0, cursor_y = 0;
-
-static uint8_t interfaceColours = 0x0F;
+void enable_cursor(uint8_t cursor_start, uint8_t cursor_end) {
+	outb(0x3D4, 0x0A);
+	outb(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
+ 
+	outb(0x3D4, 0x0B);
+	outb(0x3D5, (inb(0x3D5) & 0xE0) | cursor_end);
+}
 
 void move_csr() {
     unsigned int offset;

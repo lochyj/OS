@@ -1,17 +1,15 @@
 #include "kernel/drivers/display.h"
 
 // Info on the pointer and its use. https://wiki.osdev.org/Printing_To_Screen
-static uint16_t *textmemptr = (uint16_t *)0xB8000;
+uint16_t *textmemptr = (uint16_t *)0xB8000;
 
-static const int SCREEN_WIDTH = 80;
-static const int SCREEN_HEIGHT = 25;
+const int SCREEN_WIDTH = 80;
+const int SCREEN_HEIGHT = 25;
 
-static int cursor_x = 0, cursor_y = 0;
+uint8_t interfaceColours = 0x0F;
 
-static uint8_t interfaceColours = 0x0F;
-
-void scroll(void) {
-    unsigned int blank, temp;
+static void scroll() {
+    uint32_t blank, temp;
 
     // Blank is a space character that has the interfaceColours applied to it.
     blank = 0x20 | (interfaceColours << 8);
@@ -80,4 +78,9 @@ void puts(char *text) {
     for (int i = 0; i < strlen(text); i++) {
         putc(text[i]);
     }
+}
+
+void initialise_textmode_terminal() {
+    enable_cursor(14, 15);
+    clear_screen();
 }

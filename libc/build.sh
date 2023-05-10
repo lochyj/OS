@@ -1,0 +1,1 @@
+gcc -m32 -Wall -O -ffreestanding -fstrength-reduce -fomit-frame-pointer -finline-functions -nostdinc -fno-builtin -Wpointer-sign -Wunused-function -Wunused-variable -I ./ -I ./include/ -c -o ./build/string.out ./libc/string/string.c
